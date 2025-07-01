@@ -18,6 +18,9 @@ class ParashaWebsiteBuilder:
         self.images_dir = Path(images_dir)
         self.articles = []
         
+        # Base path for GitHub Pages - change to empty string for root domain
+        self.base_path = "/parasha_of_the_week"
+        
         # Load all templates
         self.templates = {
             'base': self.load_base_template(),
@@ -25,6 +28,12 @@ class ParashaWebsiteBuilder:
             'article': self.load_article_template(),
             'archive': self.load_archive_template()
         }
+    
+    def apply_base_path(self, html_content):
+        """Replace {{base_path}} and {base_path} placeholders with actual base path"""
+        html_content = html_content.replace('{{base_path}}', self.base_path)
+        html_content = html_content.replace('{base_path}', self.base_path)
+        return html_content
 
     def load_base_template(self):
         """Base HTML template for all pages"""
@@ -83,19 +92,19 @@ class ParashaWebsiteBuilder:
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     
     <!-- Styles -->
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="{{base_path}}/assets/css/style.css">
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="{{base_path}}/manifest.json">
     <meta name="theme-color" content="#2563eb">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/x-icon" href="{{base_path}}/favicon.ico">
+    <link rel="apple-touch-icon" href="{{base_path}}/apple-touch-icon.png">
     
     <!-- RSS Feed -->
-    <link rel="alternate" type="application/rss+xml" title="פרשת השבוע" href="/feed.xml">
-    <link rel="alternate" type="application/json" title="פרשת השבוע" href="/feed.json">
+    <link rel="alternate" type="application/rss+xml" title="פרשת השבוע" href="{{base_path}}/feed.xml">
+    <link rel="alternate" type="application/json" title="פרשת השבוע" href="{{base_path}}/feed.json">
     
     {{extra_head}}
 </head>
@@ -137,10 +146,10 @@ class ParashaWebsiteBuilder:
     <nav class="nav">
         <div class="nav-content">
             <ul class="nav-links">
-                <li><a href="/" class="nav-link active">בית</a></li>
-                <li><a href="/archive.html" class="nav-link">ארכיון</a></li>
-                <li><a href="/tags.html" class="nav-link">תגיות</a></li>
-                <li><a href="/about.html" class="nav-link">אודות</a></li>
+                <li><a href="{{base_path}}/" class="nav-link active">בית</a></li>
+                <li><a href="{{base_path}}/archive.html" class="nav-link">ארכיון</a></li>
+                <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
+                <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
             </ul>
         </div>
     </nav>
@@ -185,10 +194,10 @@ class ParashaWebsiteBuilder:
     <nav class="nav">
         <div class="nav-content">
             <ul class="nav-links">
-                <li><a href="/" class="nav-link">בית</a></li>
-                <li><a href="/archive.html" class="nav-link">ארכיון</a></li>
-                <li><a href="/tags.html" class="nav-link">תגיות</a></li>
-                <li><a href="/about.html" class="nav-link">אודות</a></li>
+                <li><a href="{{base_path}}/" class="nav-link">בית</a></li>
+                <li><a href="{{base_path}}/archive.html" class="nav-link">ארכיון</a></li>
+                <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
+                <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
             </ul>
         </div>
     </nav>
@@ -267,10 +276,10 @@ class ParashaWebsiteBuilder:
     <nav class="nav">
         <div class="nav-content">
             <ul class="nav-links">
-                <li><a href="/" class="nav-link">בית</a></li>
-                <li><a href="/archive.html" class="nav-link active">ארכיון</a></li>
-                <li><a href="/tags.html" class="nav-link">תגיות</a></li>
-                <li><a href="/about.html" class="nav-link">אודות</a></li>
+                <li><a href="{{base_path}}/" class="nav-link">בית</a></li>
+                <li><a href="{{base_path}}/archive.html" class="nav-link active">ארכיון</a></li>
+                <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
+                <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
             </ul>
         </div>
     </nav>
@@ -365,7 +374,7 @@ class ParashaWebsiteBuilder:
                     כל שבוע אנחנו חוקרים את פרשת השבוע מזווית מדעית וטכנולוגית מודרנית, 
                     וחושפים קשרים מפתיעים בין חכמת התורה לעולם המתמטיקה והטכנולוגיה.
                 </p>
-                <a href="/about.html" class="read-more">קרא עוד על הפרויקט →</a>
+                <a href="{{base_path}}/about.html" class="read-more">קרא עוד על הפרויקט →</a>
             </div>
         </aside>
         '''
@@ -378,10 +387,10 @@ class ParashaWebsiteBuilder:
             <div class="footer-content">
                 <div class="footer-links">
                     <a href="https://github.com/your-username/parasha-week" class="footer-link">GitHub</a>
-                    <a href="/feed.xml" class="footer-link">RSS</a>
-                    <a href="/feed.json" class="footer-link">JSON Feed</a>
-                    <a href="/about.html" class="footer-link">אודות</a>
-                    <a href="/contact.html" class="footer-link">צור קשר</a>
+                    <a href="{{base_path}}/feed.xml" class="footer-link">RSS</a>
+                    <a href="{{base_path}}/feed.json" class="footer-link">JSON Feed</a>
+                    <a href="{{base_path}}/about.html" class="footer-link">אודות</a>
+                    <a href="{{base_path}}/contact.html" class="footer-link">צור קשר</a>
                 </div>
                 <p>&copy; {current_year} פרשת השבוע. בנוי עם ❤️ ו-GitHub Pages</p>
                 <p class="footer-tech">
@@ -420,11 +429,11 @@ class ParashaWebsiteBuilder:
                         <time datetime="{article['date']}">{self.format_date(article['date'])}</time>
                     </div>
                     <h2 class="article-title">
-                        <a href="/articles/{article['slug']}.html">{article['title']}</a>
+                        <a href="{{base_path}}/articles/{article['slug']}.html">{article['title']}</a>
                     </h2>
                     <p class="article-excerpt">{article['excerpt']}</p>
                     <div class="article-footer">
-                        <a href="/articles/{article['slug']}.html" class="read-more">
+                        <a href="{{base_path}}/articles/{article['slug']}.html" class="read-more">
                             קרא עוד ←
                         </a>
                         <span class="reading-time">{article['reading_time']} דק׳</span>
@@ -450,6 +459,9 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{extra_head}}', '')
         page_html = page_html.replace('{{extra_scripts}}', '')
 
+        # Apply base path to all links
+        page_html = self.apply_base_path(page_html)
+        
         return page_html
 
     def render_article_page(self, article):
@@ -466,7 +478,7 @@ class ParashaWebsiteBuilder:
         content_html = md.convert(article['content'])
         
         # Generate tags HTML
-        tags_html = ''.join([f'<a href="/tags/{tag}.html" class="tag">#{tag}</a>' 
+        tags_html = ''.join([f'<a href="{{base_path}}/tags/{tag}.html" class="tag">#{tag}</a>' 
                             for tag in article['tags']])
         
         # Generate TOC
@@ -507,10 +519,13 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{author}}', article.get('author', 'אלירן סבג'))
         page_html = page_html.replace('{{image_url}}', article['image'])
         page_html = page_html.replace('{{og_type}}', 'article')
-        page_html = page_html.replace('{{canonical_url}}', f"https://your-username.github.io/parasha-week/articles/{article['slug']}.html")
+        page_html = page_html.replace('{{canonical_url}}', f"https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html")
         page_html = page_html.replace('{{extra_head}}', f'<meta property="article:published_time" content="{article["date"]}T00:00:00Z">')
         page_html = page_html.replace('{{extra_scripts}}', '')
 
+        # Apply base path to all links
+        page_html = self.apply_base_path(page_html)
+        
         return page_html
 
     def generate_related_articles(self, current_article):
@@ -530,7 +545,7 @@ class ParashaWebsiteBuilder:
         for article, _ in related:
             html += f'''
             <div class="related-article">
-                <a href="/articles/{article['slug']}.html" class="related-link">
+                <a href="{{base_path}}/articles/{article['slug']}.html" class="related-link">
                     <img src="{article['image']}" alt="{article['title']}" class="related-image">
                     <div class="related-content">
                         <span class="related-parasha">{article['parasha']}</span>
@@ -556,7 +571,7 @@ class ParashaWebsiteBuilder:
         if current_index > 0:
             prev_article = sorted_articles[current_index - 1]
             html += f'''
-            <a href="/articles/{prev_article['slug']}.html" class="nav-prev">
+            <a href="{{base_path}}/articles/{prev_article['slug']}.html" class="nav-prev">
                 <span class="nav-label">← הקודם</span>
                 <span class="nav-title">{prev_article['title']}</span>
             </a>
@@ -566,7 +581,7 @@ class ParashaWebsiteBuilder:
         if current_index < len(sorted_articles) - 1:
             next_article = sorted_articles[current_index + 1]
             html += f'''
-            <a href="/articles/{next_article['slug']}.html" class="nav-next">
+            <a href="{{base_path}}/articles/{next_article['slug']}.html" class="nav-next">
                 <span class="nav-label">הבא →</span>
                 <span class="nav-title">{next_article['title']}</span>
             </a>
@@ -602,6 +617,9 @@ class ParashaWebsiteBuilder:
         about_html = about_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/about.html')
         about_html = about_html.replace('{{extra_head}}', '')
         about_html = about_html.replace('{{extra_scripts}}', '')
+        
+        # Apply base path to all links
+        about_html = self.apply_base_path(about_html)
         
         with open(self.output_dir / "about.html", 'w', encoding='utf-8') as f:
             f.write(about_html)
@@ -669,6 +687,9 @@ class ParashaWebsiteBuilder:
         archive_html = archive_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/archive.html')
         archive_html = archive_html.replace('{{extra_head}}', '')
         archive_html = archive_html.replace('{{extra_scripts}}', '')
+        
+        # Apply base path to all links
+        archive_html = self.apply_base_path(archive_html)
         
         with open(self.output_dir / "archive.html", 'w', encoding='utf-8') as f:
             f.write(archive_html)
@@ -741,6 +762,9 @@ class ParashaWebsiteBuilder:
         tags_html = tags_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/tags.html')
         tags_html = tags_html.replace('{{extra_head}}', '')
         tags_html = tags_html.replace('{{extra_scripts}}', '')
+        
+        # Apply base path to all links
+        tags_html = self.apply_base_path(tags_html)
         
         with open(self.output_dir / "tags.html", 'w', encoding='utf-8') as f:
             f.write(tags_html)
@@ -1047,7 +1071,7 @@ self.addEventListener('fetch', function(event) {
         tag_html = '<div class="tag-cloud">'
         for tag, count in sorted_tags:
             size_class = 'tag-large' if count > 3 else 'tag-medium' if count > 1 else 'tag-small'
-            tag_html += f'<a href="/tags/{tag}.html" class="tag {size_class}">#{tag} ({count})</a>'
+            tag_html += f'<a href="{{base_path}}/tags/{tag}.html" class="tag {size_class}">#{tag} ({count})</a>'
         tag_html += '</div>'
         
         return tag_html
@@ -1060,7 +1084,7 @@ self.addEventListener('fetch', function(event) {
         for article in recent:
             html += f'''
             <li class="recent-article">
-                <a href="/articles/{article['slug']}.html" class="recent-article-link">
+                <a href="{{base_path}}/articles/{article['slug']}.html" class="recent-article-link">
                     <span class="recent-article-emoji">{article['emoji']}</span>
                     <div class="recent-article-content">
                         <span class="recent-article-title">{article['title']}</span>
@@ -1111,8 +1135,8 @@ self.addEventListener('fetch', function(event) {
         latest_articles = sorted(self.articles, key=lambda x: x['date'], reverse=True)[:20]
         for article in latest_articles:
             feed["items"].append({
-                "id": f"https://your-username.github.io/parasha-week/articles/{article['slug']}.html",
-                "url": f"https://your-username.github.io/parasha-week/articles/{article['slug']}.html",
+                "id": f"https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html",
+                "url": f"https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html",
                 "title": article['title'],
                 "content_html": markdown.markdown(article['content'], extensions=['codehilite', 'tables', 'toc', 'fenced_code']),
                 "summary": article['excerpt'],
@@ -1145,8 +1169,8 @@ self.addEventListener('fetch', function(event) {
     <item>
         <title>{article['title']}</title>
         <description>{article['excerpt']}</description>
-        <link>https://your-username.github.io/parasha-week/articles/{article['slug']}.html</link>
-        <guid>https://your-username.github.io/parasha-week/articles/{article['slug']}.html</guid>
+        <link>https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html</link>
+        <guid>https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html</guid>
         <pubDate>{article['date']}</pubDate>
         <author>{article['author']}</author>
     </item>'''
@@ -1182,7 +1206,7 @@ self.addEventListener('fetch', function(event) {
         for article in self.articles:
             sitemap_content += f'''
     <url>
-        <loc>https://your-username.github.io/parasha-week/articles/{article['slug']}.html</loc>
+        <loc>https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html</loc>
         <lastmod>{article['date']}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
