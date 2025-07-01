@@ -605,6 +605,145 @@ class ParashaWebsiteBuilder:
         
         with open(self.output_dir / "about.html", 'w', encoding='utf-8') as f:
             f.write(about_html)
+        
+        # Generate archive page
+        self.render_archive_page()
+        
+        # Generate tags page
+        self.render_tags_page()
+
+    def render_archive_page(self):
+        """Generate the archive page with all articles organized by year"""
+        # Group articles by year
+        articles_by_year = {}
+        for article in self.articles:
+            year = article.get('year', 2025)
+            if year not in articles_by_year:
+                articles_by_year[year] = []
+            articles_by_year[year].append(article)
+        
+        # Sort years in descending order
+        sorted_years = sorted(articles_by_year.keys(), reverse=True)
+        
+        # Generate archive content
+        archive_content = '''
+        <div class="archive-container">
+            <h1>ארכיון מאמרים</h1>
+            <p class="archive-intro">כל המאמרים מאורגנים לפי שנים</p>
+        '''
+        
+        for year in sorted_years:
+            year_articles = sorted(articles_by_year[year], key=lambda x: x.get('date', ''), reverse=True)
+            archive_content += f'''
+            <div class="year-section">
+                <h2 class="year-header">{year}</h2>
+                <div class="year-articles">
+            '''
+            
+            for article in year_articles:
+                archive_content += f'''
+                <div class="archive-article">
+                    <div class="archive-article-content">
+                        <h3><a href="articles/{article['slug']}.html">{article['title']}</a></h3>
+                        <p class="archive-excerpt">{article['excerpt'][:100]}...</p>
+                        <div class="archive-meta">
+                            <span class="archive-date">{self.format_date(article.get('date', ''))}</span>
+                            <span class="archive-parasha">פרשת {article.get('parasha', '')}</span>
+                        </div>
+                    </div>
+                </div>
+                '''
+            
+            archive_content += '</div></div>'
+        
+        archive_content += '</div>'
+        
+        # Apply to base template
+        archive_html = self.templates['base'].replace('{{content}}', archive_content)
+        archive_html = archive_html.replace('{{page_title}}', 'ארכיון | פרשת השבוע')
+        archive_html = archive_html.replace('{{description}}', 'ארכיון כל המאמרים בפרשת השבוע')
+        archive_html = archive_html.replace('{{keywords}}', 'ארכיון, פרשות, מאמרים')
+        archive_html = archive_html.replace('{{author}}', 'אלירן סבג')
+        archive_html = archive_html.replace('{{image_url}}', '/images/archive.png')
+        archive_html = archive_html.replace('{{og_type}}', 'website')
+        archive_html = archive_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/archive.html')
+        archive_html = archive_html.replace('{{extra_head}}', '')
+        archive_html = archive_html.replace('{{extra_scripts}}', '')
+        
+        with open(self.output_dir / "archive.html", 'w', encoding='utf-8') as f:
+            f.write(archive_html)
+
+    def render_tags_page(self):
+        """Generate the tags page with tag cloud and articles by tag"""
+        # Collect all tags
+        all_tags = {}
+        for article in self.articles:
+            for tag in article.get('tags', []):
+                if tag not in all_tags:
+                    all_tags[tag] = []
+                all_tags[tag].append(article)
+        
+        # Sort tags by frequency
+        sorted_tags = sorted(all_tags.items(), key=lambda x: len(x[1]), reverse=True)
+        
+        # Generate tags content
+        tags_content = '''
+        <div class="tags-container">
+            <h1>תגיות</h1>
+            <p class="tags-intro">מאמרים מאורגנים לפי נושאים</p>
+            
+            <div class="tag-cloud">
+        '''
+        
+        # Generate tag cloud
+        for tag, articles in sorted_tags:
+            size_class = 'large' if len(articles) > 3 else 'medium' if len(articles) > 1 else 'small'
+            tags_content += f'''
+                <a href="#tag-{tag}" class="tag-item {size_class}" data-count="{len(articles)}">
+                    {tag} ({len(articles)})
+                </a>
+            '''
+        
+        tags_content += '</div>'
+        
+        # Generate articles by tag
+        for tag, articles in sorted_tags:
+            tags_content += f'''
+            <div class="tag-section" id="tag-{tag}">
+                <h2 class="tag-header">{tag} ({len(articles)} מאמרים)</h2>
+                <div class="tag-articles">
+            '''
+            
+            for article in articles:
+                tags_content += f'''
+                <div class="tag-article">
+                    <h3><a href="articles/{article['slug']}.html">{article['title']}</a></h3>
+                    <p class="tag-excerpt">{article['excerpt'][:120]}...</p>
+                    <div class="tag-meta">
+                        <span class="tag-date">{self.format_date(article.get('date', ''))}</span>
+                        <span class="tag-parasha">פרשת {article.get('parasha', '')}</span>
+                    </div>
+                </div>
+                '''
+            
+            tags_content += '</div></div>'
+        
+        tags_content += '</div>'
+        
+        # Apply to base template
+        tags_html = self.templates['base'].replace('{{content}}', tags_content)
+        tags_html = tags_html.replace('{{page_title}}', 'תגיות | פרשת השבוע')
+        tags_html = tags_html.replace('{{description}}', 'מאמרים מאורגנים לפי תגיות ונושאים')
+        tags_html = tags_html.replace('{{keywords}}', 'תגיות, נושאים, פרשות')
+        tags_html = tags_html.replace('{{author}}', 'אלירן סבג')
+        tags_html = tags_html.replace('{{image_url}}', '/images/tags.png')
+        tags_html = tags_html.replace('{{og_type}}', 'website')
+        tags_html = tags_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/tags.html')
+        tags_html = tags_html.replace('{{extra_head}}', '')
+        tags_html = tags_html.replace('{{extra_scripts}}', '')
+        
+        with open(self.output_dir / "tags.html", 'w', encoding='utf-8') as f:
+            f.write(tags_html)
 
     def create_manifest_and_service_worker(self):
         """Create PWA manifest and service worker"""

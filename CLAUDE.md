@@ -245,27 +245,31 @@ git push origin main
 
 ### **Testing Changes (UPDATED)**
 ```bash
-# Create virtual environment (LOCAL ONLY)
-python -m venv venv
+# IMPORTANT: Always use the virtual environment for local testing
+# Virtual environment already exists in repo (DO NOT commit venv/ folder)
+
+# Activate virtual environment
 source venv/bin/activate  # Linux/Mac
 # venv\Scripts\activate   # Windows
 
-# Install dependencies
-pip install -r requirements.txt
+# Dependencies already installed in venv, but if needed:
+# pip install -r requirements.txt
 
 # Run comprehensive test (includes full build)
-python tests/test_build.py
+source venv/bin/activate && python tests/test_build.py
 
 # Manual build test
-python scripts/build.py
+source venv/bin/activate && python scripts/build.py
 
 # Check generated files
-ls docs/                    # 15+ files
+ls docs/                    # 17+ files (includes archive.html, tags.html)
 ls docs/articles/          # 13+ article pages
 
 # Local preview
 cd docs && python -m http.server 8000
 open http://localhost:8000
+
+# REMEMBER: Always use virtual environment for any Python operations
 ```
 
 ### **Troubleshooting**
