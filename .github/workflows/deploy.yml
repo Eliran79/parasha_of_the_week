@@ -1,0 +1,170 @@
+# .github/workflows/deploy.yml
+  name: 🚀 Build and Deploy Parasha Website
+
+  on:
+    push:
+      branches: [ main, master ]
+      paths:
+        - 'content/**'
+        - 'images/**'
+        - 'scripts/**'
+        - '.github/workflows/**'
+    pull_request:
+      branches: [ main, master ]
+
+    # Allow manual triggering
+    workflow_dispatch:
+
+  # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+  permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+  # Allow only one concurrent deployment
+  concurrency:
+    group: "pages"
+    cancel-in-progress: false
+
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+
+      steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper date handling
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🔧 Setup Node.js (for additional tools if needed)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 🖼️ Optimize images
+        run: |
+          # Install image optimization tools
+          sudo apt-get update
+          sudo apt-get install -y imagemagick webp
+
+          # Optimize images if they exist
+          if [ -d "images" ]; then
+            find images -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" | while read img; do
+              echo "Optimizing $img"
+              # Convert to WebP for better performance
+              filename=$(basename "$img" | cut -d. -f1)
+              cwebp -q 85 "$img" -o "images/${filename}.webp" || true
+            done
+          fi
+
+      - name: 🏗️ Build website
+        run: |
+          echo "🚀 Starting build process..."
+          python scripts/build.py
+
+          echo "📊 Build statistics:"
+          echo "Articles built: $(find docs/articles -name "*.html" | wc -l)"
+          echo "Total files: $(find docs -type f | wc -l)"
+          echo "Site size: $(du -sh docs)"
+
+      - name: 🧪 Validate build
+        run: |
+          # Basic validation
+          [ -f "docs/index.html" ] || { echo "❌ index.html not found"; exit 1; }
+          [ -f "docs/feed.json" ] || { echo "❌ feed.json not found"; exit 1; }
+          [ -f "docs/articles.json" ] || { echo "❌ articles.json not found"; exit 1; }
+
+          echo "✅ Build validation passed"
+
+      - name: 📄 Setup Pages
+        uses: actions/configure-pages@v4
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+      - name: 📤 Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        with:
+          path: ./docs
+
+      - name: 🎯 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+      - name: 📱 Notify deployment
+        if: success()
+        run: |
+          echo "🎉 Website deployed successfully!"
+          echo "🌐 URL: ${{ steps.deployment.outputs.page_url }}"
+
+          # Create deployment summary
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          ## 🎉 Deployment Successful!
+
+          **Website URL:** ${{ steps.deployment.outputs.page_url }}
+
+          **Build Statistics:**
+          - Articles: $(find docs/articles -name "*.html" 2>/dev/null | wc -l)
+          - Images: $(find docs/images -type f 2>/dev/null | wc -l)
+          - Total files: $(find docs -type f 2>/dev/null | wc -l)
+          - Site size: $(du -sh docs 2>/dev/null | cut -f1)
+
+          **Latest Articles:**
+          $(ls -la docs/articles/*.html 2>/dev/null | tail -5 | awk '{print "- " $9}' | sed 's|docs/articles/||g' | sed 's|.html||g' || echo "No articles found")
+          EOF
+
+    # Job for validating content (runs on PRs)
+    validate:
+      runs-on: ubuntu-latest
+      if: github.event_name == 'pull_request'
+
+      steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install markdown pyyaml pillow
+
+      - name: 🔍 Validate content
+        run: |
+          echo "🔍 Validating markdown files..."
+
+          # Check for required frontmatter
+          for file in content/*.md; do
+            if [ -f "$file" ]; then
+              echo "Checking $file..."
+
+              # Check for frontmatter
+              if ! head -1 "$file" | grep -q "^---$"; then
+                echo "⚠️ Warning: $file missing frontmatter"
+              fi
+
+              # Check for Hebrew content
+              if ! grep -q '[א-ת]' "$file"; then
+                echo "⚠️ Warning: $file appears to have no Hebrew content"
+              fi
+
+              echo "✅ $file validated"
+            fi
+          done
+
+          echo "📊 Content validation complete"
