@@ -47,12 +47,6 @@
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🔧 Setup Node.js (for additional tools if needed)
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-
       - name: 🖼️ Optimize images
         run: |
           # Install image optimization tools
