@@ -112,7 +112,7 @@ class ParashaWebsiteBuilder:
     {{content}}
     
     <!-- Scripts -->
-    <script src="/assets/js/main.js"></script>
+    <script src="{{base_path}}/assets/js/main.js"></script>
     
     <!-- Re-render MathJax and Prism -->
     <script>
@@ -453,7 +453,7 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{description}}', 'חיבור בין פרשיות התורה למתמטיקה, מדע הנתונים, בינה מלאכותית ועולם הסטארטאפים')
         page_html = page_html.replace('{{keywords}}', 'פרשת השבוע, מתמטיקה, מדע נתונים, בינה מלאכותית, יהדות, טכנולוגיה')
         page_html = page_html.replace('{{author}}', 'אלירן סבג')
-        page_html = page_html.replace('{{image_url}}', '/images/logo.png')
+        page_html = page_html.replace('{{image_url}}', f'{self.base_path}/images/logo.png')
         page_html = page_html.replace('{{og_type}}', 'website')
         page_html = page_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/')
         page_html = page_html.replace('{{extra_head}}', '')
@@ -612,7 +612,7 @@ class ParashaWebsiteBuilder:
         about_html = about_html.replace('{{description}}', 'אודות פרויקט פרשת השבוע')
         about_html = about_html.replace('{{keywords}}', 'אודות, פרשת השבוע')
         about_html = about_html.replace('{{author}}', 'אלירן סבג')
-        about_html = about_html.replace('{{image_url}}', '/images/about.png')
+        about_html = about_html.replace('{{image_url}}', f'{self.base_path}/images/about.png')
         about_html = about_html.replace('{{og_type}}', 'website')
         about_html = about_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/about.html')
         about_html = about_html.replace('{{extra_head}}', '')
@@ -682,7 +682,7 @@ class ParashaWebsiteBuilder:
         archive_html = archive_html.replace('{{description}}', 'ארכיון כל המאמרים בפרשת השבוע')
         archive_html = archive_html.replace('{{keywords}}', 'ארכיון, פרשות, מאמרים')
         archive_html = archive_html.replace('{{author}}', 'אלירן סבג')
-        archive_html = archive_html.replace('{{image_url}}', '/images/archive.png')
+        archive_html = archive_html.replace('{{image_url}}', f'{self.base_path}/images/archive.png')
         archive_html = archive_html.replace('{{og_type}}', 'website')
         archive_html = archive_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/archive.html')
         archive_html = archive_html.replace('{{extra_head}}', '')
@@ -757,7 +757,7 @@ class ParashaWebsiteBuilder:
         tags_html = tags_html.replace('{{description}}', 'מאמרים מאורגנים לפי תגיות ונושאים')
         tags_html = tags_html.replace('{{keywords}}', 'תגיות, נושאים, פרשות')
         tags_html = tags_html.replace('{{author}}', 'אלירן סבג')
-        tags_html = tags_html.replace('{{image_url}}', '/images/tags.png')
+        tags_html = tags_html.replace('{{image_url}}', f'{self.base_path}/images/tags.png')
         tags_html = tags_html.replace('{{og_type}}', 'website')
         tags_html = tags_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/tags.html')
         tags_html = tags_html.replace('{{extra_head}}', '')
@@ -801,36 +801,35 @@ class ParashaWebsiteBuilder:
             json.dump(manifest, f, ensure_ascii=False, indent=2)
         
         # Service Worker
-        sw_content = '''
+        sw_content = f'''
 const CACHE_NAME = 'parasha-week-v1';
 const urlsToCache = [
-  '/',
-  '/assets/css/style.css',
-  '/assets/js/main.js',
-  '/manifest.json'
+  '{self.base_path}/',
+  '{self.base_path}/assets/css/style.css',
+  '{self.base_path}/assets/js/main.js',
+  '{self.base_path}/manifest.json'
 ];
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function(event) {{
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(function(cache) {
+      .then(function(cache) {{
         return cache.addAll(urlsToCache);
-      })
+      }})
   );
-});
+}});
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function(event) {{
   event.respondWith(
     caches.match(event.request)
-      .then(function(response) {
-        if (response) {
+      .then(function(response) {{
+        if (response) {{
           return response;
-        }
+        }}
         return fetch(event.request);
-      }
-    )
+      }})
   );
-});
+}});
         '''
         
         with open(self.output_dir / "sw.js", 'w', encoding='utf-8') as f:
@@ -967,12 +966,12 @@ self.addEventListener('fetch', function(event) {
             if matches:
                 # Return the first match, relative to images directory
                 relative_path = matches[0].relative_to(self.images_dir)
-                return f"/images/{relative_path}"
+                return f"{self.base_path}/images/{relative_path}"
         
         # Default fallback - check if default exists, otherwise use a safe fallback
         if (self.images_dir / "default.jpg").exists():
             print(f"Warning: No matching image found for {filename}, using default")
-            return "/images/default.jpg"
+            return f"{self.base_path}/images/default.jpg"
         else:
             print(f"Warning: No matching image found for {filename}, no default available")
             return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='16' fill='%23666' text-anchor='middle' dy='.3em'%3ENo Image%3C/text%3E%3C/svg%3E"
