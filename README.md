@@ -84,7 +84,8 @@ The repository includes rich Hebrew content like:
 - **Hebrew RTL layout** - Proper right-to-left text flow
 - **LaTeX math support** - Render mathematical formulas
 - **Year-based articles** - Multi-year perspectives on same topics
-- **Image matching** - Automatic article-image pairing
+- **Smart image system** - Auto-matching and responsive resizing
+- **GitHub Pages ready** - Proper URL paths and asset loading
 - **SEO optimized** - Feeds, sitemap, meta tags
 - **PWA ready** - Offline reading capability
 - **Mobile responsive** - Perfect on all devices

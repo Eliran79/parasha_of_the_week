@@ -123,7 +123,10 @@ def parasha_algorithm():
 - `parasha_[parasha]_[year].jpg` → `parasha_behar_2025.jpg`  
 - `parashat_[parasha]_[year].jpg` → `parashat_shalach_2025.jpg`
 
-**Auto-matching**: Build system automatically links images to articles!
+**Auto-features**: 
+- Build system automatically links images to articles
+- Images auto-resize to fit containers without cropping
+- GitHub Pages URL paths automatically applied
 
 ## 🔄 **Future Workflow (Super Simple!)**
 
@@ -251,10 +254,12 @@ python tests/test_build.py
    - Add meaningful tags for discoverability
    - Include engaging excerpts
 
-2. **Image Optimization:**
-   - Use descriptive filenames matching articles
+2. **Image System:**
+   - Use descriptive filenames matching articles with years
    - Prefer `.jpg` for photos, `.png` for graphics
-   - Build script auto-optimizes them
+   - Build script auto-optimizes and resizes images
+   - Automatic GitHub Pages URL path generation
+   - Responsive design prevents cropping issues
 
 3. **SEO Boost:**
    - Write descriptive titles

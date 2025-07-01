@@ -105,6 +105,8 @@ This text will be displayed LTR with English fonts.
   - `parasha_[name]_[year].jpg/png` → `parasha_behar_2025.jpg`
   - `parashat_[name]_[year].jpg/png` → `parashat_shalach_2025.jpg`
 - **Auto-matching**: Build script automatically matches images to articles
+- **Auto-resize**: Images automatically resize to fit containers without cropping
+- **GitHub Pages paths**: All images use `/parasha_of_the_week/images/` prefix
 
 ## 🔧 Build System Details
 
@@ -167,6 +169,13 @@ class ParashaWebsiteBuilder:
 - **Mobile responsive**: Full mobile optimization
 - **PWA**: Offline support, installable
 - **Accessibility**: Screen reader compatible
+
+### **Image System**
+- **Auto-matching**: Year-based image matching system
+- **Responsive design**: Auto-resize with background-size: cover
+- **GitHub Pages paths**: All images use correct /parasha_of_the_week/ prefix
+- **Fallback SVG**: Generated placeholder for articles without images
+- **Optimized loading**: WebP conversion and lazy loading
 
 ### **Math & Code**
 - **MathJax**: Full LaTeX support with proper RTL handling
