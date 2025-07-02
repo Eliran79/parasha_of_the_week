@@ -478,7 +478,7 @@ class ParashaWebsiteBuilder:
         content_html = md.convert(article['content'])
         
         # Generate tags HTML
-        tags_html = ''.join([f'<a href="{{base_path}}/tags/{tag}.html" class="tag">#{tag}</a>' 
+        tags_html = ''.join([f'<a href="{{base_path}}/tags.html#tag-{tag}" class="tag">#{tag}</a>' 
                             for tag in article['tags']])
         
         # Generate TOC
@@ -1070,7 +1070,7 @@ self.addEventListener('fetch', function(event) {{
         tag_html = '<div class="tag-cloud">'
         for tag, count in sorted_tags:
             size_class = 'tag-large' if count > 3 else 'tag-medium' if count > 1 else 'tag-small'
-            tag_html += f'<a href="{{base_path}}/tags/{tag}.html" class="tag {size_class}">#{tag} ({count})</a>'
+            tag_html += f'<a href="{{base_path}}/tags.html#tag-{tag}" class="tag {size_class}">#{tag} ({count})</a>'
         tag_html += '</div>'
         
         return tag_html
