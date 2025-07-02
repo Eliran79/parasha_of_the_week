@@ -593,24 +593,75 @@ class ParashaWebsiteBuilder:
     def create_additional_pages(self):
         """Create additional pages like about, contact, etc."""
         
-        # About page
-        about_content = '''
-        <div class="page-header">
-            <h1>אודות הפרויקט</h1>
+        # About page with full page structure
+        about_page_content = '''
+    <header class="header">
+        <div class="header-content">
+            <h1 class="site-title">פרשת השבוע</h1>
+            <p class="site-subtitle">חיבור בין חכמת התורה למתמטיקה, מדע הנתונים ובינה מלאכותית</p>
         </div>
-        <div class="page-content">
-            <h2>המטרה</h2>
-            <p>הפרויקט שואף לגלות קשרים מעמיקים ומפתיעים בין הפרשיות השבועיות לבין עקרונות מתמטיים, אלגוריתמים, מודלים סטטיסטיים ותובנות מעולם הבינה המלאכותית.</p>
+    </header>
+
+    <nav class="nav">
+        <div class="nav-content">
+            <ul class="nav-links">
+                <li><a href="{{base_path}}/" class="nav-link">בית</a></li>
+                <li><a href="{{base_path}}/archive.html" class="nav-link">ארכיון</a></li>
+                <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
+                <li><a href="{{base_path}}/about.html" class="nav-link active">אודות</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="content">
+            <div class="page-header">
+                <h1>אודות הפרויקט</h1>
+                <p class="page-subtitle">המטרה והגישה של פרשת השבוע</p>
+            </div>
             
-            <h2>הגישה</h2>
-            <p>כל פרשה נבחנת דרך עדשה טכנולוגית ומדעית, תוך חיפוש אחר דפוסים, מבנים לוגיים ועקרונות שיכולים לשמש השראה לפתרונות מודרניים בעולם הטכנולוגיה והחדשנות.</p>
+            <div class="page-content">
+                <section class="content-section">
+                    <h2>המטרה</h2>
+                    <p>הפרויקט שואף לגלות קשרים מעמיקים ומפתיעים בין הפרשיות השבועיות לבין עקרונות מתמטיים, אלגוריתמים, מודלים סטטיסטיים ותובנות מעולם הבינה המלאכותית.</p>
+                    
+                    <p>כל שבוע אנחנו חוקרים את פרשת השבוע מזווית מדעית וטכנולוגית מודרנית, וחושפים קשרים מפתיעים בין חכמת התורה לעולם המתמטיקה והטכנולוגיה.</p>
+                </section>
+                
+                <section class="content-section">
+                    <h2>הגישה</h2>
+                    <p>כל פרשה נבחנת דרך עדשה טכנולוגית ומדעית, תוך חיפוש אחר דפוסים, מבנים לוגיים ועקרונות שיכולים לשמש השראה לפתרונות מודרניים בעולם הטכנולוגיה והחדשנות.</p>
+                    
+                    <p>המאמרים מתמקדים בנושאים כמו:</p>
+                    <ul>
+                        <li>מודלים מתמטיים בטקסטים מקראיים</li>
+                        <li>עקרונות סטטיסטיים בחכמת המסורת</li>
+                        <li>מסגרות אתיות לטכנולוגיה מודרנית</li>
+                        <li>תובנות מבוססות נתונים מחכמה עתיקה</li>
+                        <li>לקחי מנהיגות דרך עדשה טכנית</li>
+                        <li>חשיבה אלגוריתמית בהלכה יהודית</li>
+                    </ul>
+                </section>
+                
+                <section class="content-section">
+                    <h2>הקהל היעד</h2>
+                    <ul>
+                        <li>אנשי טכנולוגיה המתעניינים בחכמה יהודית</li>
+                        <li>מדעני נתונים ומתמטיקאים</li>
+                        <li>מייסדי סטארטאפים ויזמים</li>
+                        <li>תלמידי תורה וטכנולוגיה כאחד</li>
+                    </ul>
+                </section>
+            </div>
         </div>
-        '''
+    </main>
+    
+    ''' + self.generate_footer_html()
         
-        about_html = self.templates['base'].replace('{{content}}', about_content)
+        about_html = self.templates['base'].replace('{{content}}', about_page_content)
         about_html = about_html.replace('{{page_title}}', 'אודות | פרשת השבוע')
-        about_html = about_html.replace('{{description}}', 'אודות פרויקט פרשת השבוע')
-        about_html = about_html.replace('{{keywords}}', 'אודות, פרשת השבוע')
+        about_html = about_html.replace('{{description}}', 'אודות פרויקט פרשת השבוע - חיבור בין חכמת התורה למתמטיקה ומדע הנתונים')
+        about_html = about_html.replace('{{keywords}}', 'אודות, פרשת השבוע, מתמטיקה, מדע נתונים')
         about_html = about_html.replace('{{author}}', 'אלירן סבג')
         about_html = about_html.replace('{{image_url}}', f'{self.base_path}/images/about.png')
         about_html = about_html.replace('{{og_type}}', 'website')
@@ -623,6 +674,95 @@ class ParashaWebsiteBuilder:
         
         with open(self.output_dir / "about.html", 'w', encoding='utf-8') as f:
             f.write(about_html)
+        
+        # Contact page with full page structure
+        contact_page_content = '''
+    <header class="header">
+        <div class="header-content">
+            <h1 class="site-title">פרשת השבוע</h1>
+            <p class="site-subtitle">חיבור בין חכמת התורה למתמטיקה, מדע הנתונים ובינה מלאכותית</p>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="nav-content">
+            <ul class="nav-links">
+                <li><a href="{{base_path}}/" class="nav-link">בית</a></li>
+                <li><a href="{{base_path}}/archive.html" class="nav-link">ארכיון</a></li>
+                <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
+                <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="content">
+            <div class="page-header">
+                <h1>צור קשר</h1>
+                <p class="page-subtitle">יש לך רעיון למאמר? שאלה? הערה? נשמח לשמוע!</p>
+            </div>
+            
+            <div class="page-content">
+                <section class="content-section">
+                    <h2>אלירן סבג (Eliran Sabag)</h2>
+                    <p>מחבר ויוצר פרויקט פרשת השבוע</p>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <strong>📧 אימייל:</strong>
+                            <a href="mailto:eliran.sbg@gmail.com">eliran.sbg@gmail.com</a>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <strong>💼 LinkedIn:</strong>
+                            <a href="https://www.linkedin.com/in/eliran-sabag-51832651/" target="_blank" rel="noopener">Eliran Sabag</a>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <strong>📂 GitHub:</strong>
+                            <a href="https://github.com/your-username/parasha-week" target="_blank" rel="noopener">parasha-week</a>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="content-section">
+                    <h2>תרומות וחיבור</h2>
+                    <p>הפרויקט מקבל בברכה:</p>
+                    <ul>
+                        <li>רעיונות למאמרים חדשים</li>
+                        <li>הצעות לשיפור טכני</li>
+                        <li>משוב על התוכן הקיים</li>
+                        <li>תרומות קוד ב-GitHub</li>
+                        <li>שיתופי הפוסטים ברשתות החברתיות</li>
+                    </ul>
+                </section>
+                
+                <section class="content-section">
+                    <h2>הזמנה לשיתוף</h2>
+                    <p>מוזמנים לשתף את המאמרים, לתת כוכבית ב-GitHub, ולהמליץ לחברים שאוהבים חיבורים מעניינים בין עולמות!</p>
+                </section>
+            </div>
+        </div>
+    </main>
+    
+    ''' + self.generate_footer_html()
+        
+        contact_html = self.templates['base'].replace('{{content}}', contact_page_content)
+        contact_html = contact_html.replace('{{page_title}}', 'צור קשר | פרשת השבוע')
+        contact_html = contact_html.replace('{{description}}', 'יצירת קשר עם אלירן סבג, יוצר פרויקט פרשת השבוע')
+        contact_html = contact_html.replace('{{keywords}}', 'צור קשר, אלירן סבג, פרשת השבוע')
+        contact_html = contact_html.replace('{{author}}', 'אלירן סבג')
+        contact_html = contact_html.replace('{{image_url}}', f'{self.base_path}/images/contact.png')
+        contact_html = contact_html.replace('{{og_type}}', 'website')
+        contact_html = contact_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/contact.html')
+        contact_html = contact_html.replace('{{extra_head}}', '')
+        contact_html = contact_html.replace('{{extra_scripts}}', '')
+        
+        # Apply base path to all links
+        contact_html = self.apply_base_path(contact_html)
+        
+        with open(self.output_dir / "contact.html", 'w', encoding='utf-8') as f:
+            f.write(contact_html)
         
         # Generate archive page
         self.render_archive_page()
@@ -707,13 +847,33 @@ class ParashaWebsiteBuilder:
         # Sort tags by frequency
         sorted_tags = sorted(all_tags.items(), key=lambda x: len(x[1]), reverse=True)
         
-        # Generate tags content
+        # Generate tags page content with full structure
         tags_content = '''
-        <div class="tags-container">
-            <h1>תגיות</h1>
-            <p class="tags-intro">מאמרים מאורגנים לפי נושאים</p>
-            
-            <div class="tag-cloud">
+    <header class="header">
+        <div class="header-content">
+            <h1 class="site-title">פרשת השבוע</h1>
+            <p class="site-subtitle">חיבור בין חכמת התורה למתמטיקה, מדע הנתונים ובינה מלאכותית</p>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="nav-content">
+            <ul class="nav-links">
+                <li><a href="{{base_path}}/" class="nav-link">בית</a></li>
+                <li><a href="{{base_path}}/archive.html" class="nav-link">ארכיון</a></li>
+                <li><a href="{{base_path}}/tags.html" class="nav-link active">תגיות</a></li>
+                <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="content">
+            <div class="tags-container">
+                <h1>תגיות</h1>
+                <p class="tags-intro">מאמרים מאורגנים לפי נושאים</p>
+                
+                <div class="tag-cloud">
         '''
         
         # Generate tag cloud
@@ -749,7 +909,12 @@ class ParashaWebsiteBuilder:
             
             tags_content += '</div></div>'
         
-        tags_content += '</div>'
+        tags_content += '''
+            </div>
+        </div>
+    </main>
+    
+    ''' + self.generate_footer_html()
         
         # Apply to base template
         tags_html = self.templates['base'].replace('{{content}}', tags_content)
