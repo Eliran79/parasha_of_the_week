@@ -783,26 +783,22 @@ class ParashaWebsiteBuilder:
         # Sort years in descending order
         sorted_years = sorted(articles_by_year.keys(), reverse=True)
         
-        # Generate archive content
-        archive_content = '''
-        <div class="archive-container">
-            <h1>ארכיון מאמרים</h1>
-            <p class="archive-intro">כל המאמרים מאורגנים לפי שנים</p>
-        '''
+        # Generate archive articles HTML
+        archive_articles_html = ''
         
         for year in sorted_years:
             year_articles = sorted(articles_by_year[year], key=lambda x: x.get('date', ''), reverse=True)
-            archive_content += f'''
+            archive_articles_html += f'''
             <div class="year-section">
                 <h2 class="year-header">{year}</h2>
                 <div class="year-articles">
             '''
             
             for article in year_articles:
-                archive_content += f'''
+                archive_articles_html += f'''
                 <div class="archive-article">
                     <div class="archive-article-content">
-                        <h3><a href="articles/{article['slug']}.html">{article['title']}</a></h3>
+                        <h3><a href="{{{{base_path}}}}/articles/{article['slug']}.html">{article['title']}</a></h3>
                         <p class="archive-excerpt">{article['excerpt'][:100]}...</p>
                         <div class="archive-meta">
                             <span class="archive-date">{self.format_date(article.get('date', ''))}</span>
@@ -812,12 +808,43 @@ class ParashaWebsiteBuilder:
                 </div>
                 '''
             
-            archive_content += '</div></div>'
+            archive_articles_html += '</div></div>'
         
-        archive_content += '</div>'
+        # Generate archive page content with full structure including header and footer
+        archive_page_content = '''
+    <header class="header">
+        <div class="header-content">
+            <h1 class="site-title">פרשת השבוע</h1>
+            <p class="site-subtitle">חיבור בין חכמת התורה למתמטיקה, מדע הנתונים ובינה מלאכותית</p>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="nav-content">
+            <ul class="nav-links">
+                <li><a href="{{base_path}}/" class="nav-link">בית</a></li>
+                <li><a href="{{base_path}}/archive.html" class="nav-link active">ארכיון</a></li>
+                <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
+                <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="content">
+            <div class="archive-container">
+                <h1>ארכיון מאמרים</h1>
+                <p class="archive-intro">כל המאמרים מאורגנים לפי שנים</p>
+                
+                ''' + archive_articles_html + '''
+            </div>
+        </div>
+    </main>
+    
+    ''' + self.generate_footer_html()
         
         # Apply to base template
-        archive_html = self.templates['base'].replace('{{content}}', archive_content)
+        archive_html = self.templates['base'].replace('{{content}}', archive_page_content)
         archive_html = archive_html.replace('{{page_title}}', 'ארכיון | פרשת השבוע')
         archive_html = archive_html.replace('{{description}}', 'ארכיון כל המאמרים בפרשת השבוע')
         archive_html = archive_html.replace('{{keywords}}', 'ארכיון, פרשות, מאמרים')
