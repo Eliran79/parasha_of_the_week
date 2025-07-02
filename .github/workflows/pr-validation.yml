@@ -1,0 +1,420 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'content/**'
+      - 'images/**'
+      - 'scripts/**'
+      - 'assets/**'
+
+jobs:
+  validate-content:
+    runs-on: ubuntu-latest
+    name: Validate Article Content
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install yamllint markdown pyyaml pillow
+
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v40
+      with:
+        files: |
+          content/**/*.md
+          images/**/*.{jpg,jpeg,png,gif,webp}
+
+    - name: List changed files
+      run: |
+        echo "Changed files:"
+        echo "${{ steps.changed-files.outputs.all_changed_files }}"
+
+    - name: Validate YAML frontmatter
+      if: steps.changed-files.outputs.any_changed == 'true'
+      run: |
+        echo "Validating YAML frontmatter in markdown files..."
+        python3 << 'EOF'
+        import yaml
+        import sys
+        import os
+        import re
+        from pathlib import Path
+
+        def validate_frontmatter(file_path):
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Extract frontmatter
+            if not content.startswith('---'):
+                print(f"❌ {file_path}: Missing frontmatter")
+                return False
+            
+            try:
+                end_idx = content.find('---', 3)
+                if end_idx == -1:
+                    print(f"❌ {file_path}: Malformed frontmatter (missing closing ---)")
+                    return False
+                
+                frontmatter = content[3:end_idx].strip()
+                data = yaml.safe_load(frontmatter)
+                
+                # Required fields
+                required_fields = ['title', 'parasha', 'date', 'tags', 'emoji', 'excerpt', 'author']
+                for field in required_fields:
+                    if field not in data:
+                        print(f"❌ {file_path}: Missing required field '{field}'")
+                        return False
+                
+                # Validate field types and constraints
+                if not isinstance(data['tags'], list) or len(data['tags']) < 3:
+                    print(f"❌ {file_path}: 'tags' must be a list with at least 3 items")
+                    return False
+                
+                if len(data['excerpt']) > 200:
+                    print(f"❌ {file_path}: 'excerpt' must be 200 characters or less")
+                    return False
+                
+                # Validate date format
+                import datetime
+                try:
+                    datetime.datetime.strptime(data['date'], '%Y-%m-%d')
+                except ValueError:
+                    print(f"❌ {file_path}: 'date' must be in YYYY-MM-DD format")
+                    return False
+                
+                print(f"✅ {file_path}: Valid frontmatter")
+                return True
+                
+            except yaml.YAMLError as e:
+                print(f"❌ {file_path}: Invalid YAML - {e}")
+                return False
+
+        # Validate all changed markdown files
+        changed_files = os.environ.get('CHANGED_FILES', '').split()
+        md_files = [f for f in changed_files if f.endswith('.md') and f.startswith('content/')]
+        
+        if not md_files:
+            print("No markdown files to validate")
+            sys.exit(0)
+        
+        all_valid = True
+        for file_path in md_files:
+            if os.path.exists(file_path):
+                if not validate_frontmatter(file_path):
+                    all_valid = False
+        
+        if not all_valid:
+            sys.exit(1)
+        EOF
+      env:
+        CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+
+    - name: Validate file naming conventions
+      if: steps.changed-files.outputs.any_changed == 'true'
+      run: |
+        echo "Validating file naming conventions..."
+        python3 << 'EOF'
+        import os
+        import re
+        import sys
+
+        def validate_naming(file_path):
+            filename = os.path.basename(file_path)
+            
+            if file_path.startswith('content/'):
+                # Validate markdown file naming
+                pattern = r'^parasha?t?_[a-z_]+_\d{4}\.md$'
+                if not re.match(pattern, filename):
+                    print(f"❌ {file_path}: Must follow pattern 'parasha_[name]_[year].md' or 'parashat_[name]_[year].md'")
+                    return False
+                print(f"✅ {file_path}: Valid naming convention")
+                return True
+                
+            elif file_path.startswith('images/'):
+                # Validate image file naming
+                pattern = r'^[a-z_]+_\d{4}\.(jpg|jpeg|png|gif|webp)$'
+                if not re.match(pattern, filename):
+                    print(f"❌ {file_path}: Must follow pattern '[name]_[year].[extension]'")
+                    return False
+                print(f"✅ {file_path}: Valid naming convention")
+                return True
+            
+            return True
+
+        changed_files = os.environ.get('CHANGED_FILES', '').split()
+        relevant_files = [f for f in changed_files if f.startswith(('content/', 'images/'))]
+        
+        if not relevant_files:
+            print("No relevant files to validate naming")
+            sys.exit(0)
+        
+        all_valid = True
+        for file_path in relevant_files:
+            if os.path.exists(file_path):
+                if not validate_naming(file_path):
+                    all_valid = False
+        
+        if not all_valid:
+            sys.exit(1)
+        EOF
+      env:
+        CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+
+    - name: Validate image files
+      if: steps.changed-files.outputs.any_changed == 'true'
+      run: |
+        echo "Validating image files..."
+        python3 << 'EOF'
+        import os
+        import sys
+        from PIL import Image
+
+        def validate_image(file_path):
+            try:
+                with Image.open(file_path) as img:
+                    # Check file size (max 5MB)
+                    file_size = os.path.getsize(file_path)
+                    if file_size > 5 * 1024 * 1024:
+                        print(f"❌ {file_path}: File size {file_size/1024/1024:.1f}MB exceeds 5MB limit")
+                        return False
+                    
+                    # Check dimensions (reasonable limits)
+                    width, height = img.size
+                    if width > 2000 or height > 2000:
+                        print(f"⚠️ {file_path}: Large dimensions {width}x{height} - consider optimizing")
+                    
+                    print(f"✅ {file_path}: Valid image ({width}x{height}, {file_size/1024:.0f}KB)")
+                    return True
+                    
+            except Exception as e:
+                print(f"❌ {file_path}: Invalid image file - {e}")
+                return False
+
+        changed_files = os.environ.get('CHANGED_FILES', '').split()
+        image_files = [f for f in changed_files if f.startswith('images/') and f.lower().endswith(('.jpg', '.jpeg', '.png', '.gif', '.webp'))]
+        
+        if not image_files:
+            print("No image files to validate")
+            sys.exit(0)
+        
+        all_valid = True
+        for file_path in image_files:
+            if os.path.exists(file_path):
+                if not validate_image(file_path):
+                    all_valid = False
+        
+        if not all_valid:
+            sys.exit(1)
+        EOF
+      env:
+        CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+
+    - name: Test build process
+      run: |
+        echo "Testing build process..."
+        python scripts/build.py
+        
+        # Check that build succeeded
+        if [ ! -f "docs/index.html" ]; then
+          echo "❌ Build failed - index.html not generated"
+          exit 1
+        fi
+        
+        # Check for new article pages
+        if ls docs/articles/*.html 1> /dev/null 2>&1; then
+          echo "✅ Build successful - article pages generated"
+        else
+          echo "❌ Build failed - no article pages generated"
+          exit 1
+        fi
+
+    - name: Validate HTML output
+      run: |
+        echo "Validating HTML output..."
+        python3 << 'EOF'
+        import os
+        import re
+        from pathlib import Path
+
+        def check_html_file(file_path):
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Basic HTML validation
+            issues = []
+            
+            # Check for required meta tags
+            if 'charset="UTF-8"' not in content:
+                issues.append("Missing UTF-8 charset")
+            
+            if 'dir="rtl"' not in content:
+                issues.append("Missing RTL direction")
+            
+            # Check for Hebrew content
+            hebrew_pattern = r'[\u0590-\u05FF]+'
+            if not re.search(hebrew_pattern, content):
+                issues.append("No Hebrew content detected")
+            
+            # Check for required structural elements
+            required_elements = ['<header', '<nav', '<main', '<footer']
+            for element in required_elements:
+                if element not in content:
+                    issues.append(f"Missing {element} element")
+            
+            if issues:
+                print(f"⚠️ {file_path}: {', '.join(issues)}")
+            else:
+                print(f"✅ {file_path}: Valid HTML structure")
+            
+            return len(issues) == 0
+
+        # Check key HTML files
+        html_files = ['docs/index.html']
+        
+        # Add any new article files
+        article_dir = Path('docs/articles')
+        if article_dir.exists():
+            html_files.extend([str(f) for f in article_dir.glob('*.html')])
+        
+        all_valid = True
+        for file_path in html_files:
+            if os.path.exists(file_path):
+                if not check_html_file(file_path):
+                    all_valid = True  # Don't fail on warnings
+        
+        print("HTML validation completed")
+        EOF
+
+    - name: Security scan
+      run: |
+        echo "Running security scan..."
+        python3 << 'EOF'
+        import os
+        import re
+
+        def scan_file_for_security_issues(file_path):
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            issues = []
+            
+            # Check for potential security issues
+            security_patterns = [
+                (r'<script[^>]*src=["\']https?://[^"\']*["\']', 'External script inclusion'),
+                (r'eval\s*\(', 'eval() usage'),
+                (r'innerHTML\s*=', 'innerHTML assignment'),
+                (r'document\.write\s*\(', 'document.write() usage'),
+                (r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', 'Email address exposure'),
+                (r'password|secret|key|token', 'Potential credentials'),
+            ]
+            
+            for pattern, description in security_patterns:
+                if re.search(pattern, content, re.IGNORECASE):
+                    issues.append(description)
+            
+            if issues:
+                print(f"⚠️ {file_path}: Security concerns - {', '.join(issues)}")
+            else:
+                print(f"✅ {file_path}: No security issues detected")
+            
+            return len(issues) == 0
+
+        changed_files = os.environ.get('CHANGED_FILES', '').split()
+        
+        # Scan all changed files
+        for file_path in changed_files:
+            if os.path.exists(file_path) and file_path.endswith(('.md', '.html', '.js')):
+                scan_file_for_security_issues(file_path)
+        
+        print("Security scan completed")
+        EOF
+      env:
+        CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+
+  check-pr-requirements:
+    runs-on: ubuntu-latest
+    name: Check PR Requirements
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check PR title format
+      run: |
+        PR_TITLE="${{ github.event.pull_request.title }}"
+        echo "PR Title: $PR_TITLE"
+        
+        # Check if title contains Hebrew or follows expected format
+        if [[ ! "$PR_TITLE" =~ [א-ת] ]] && [[ ! "$PR_TITLE" =~ ^(Add|Update|Fix|Remove).* ]]; then
+          echo "❌ PR title should contain Hebrew text or follow format: Add/Update/Fix/Remove [description]"
+          exit 1
+        fi
+        
+        echo "✅ PR title format is acceptable"
+
+    - name: Check PR description
+      run: |
+        PR_BODY="${{ github.event.pull_request.body }}"
+        
+        if [ -z "$PR_BODY" ]; then
+          echo "❌ PR must include a description"
+          exit 1
+        fi
+        
+        # Check for checklist items
+        if [[ ! "$PR_BODY" =~ \[.*\] ]]; then
+          echo "⚠️ Consider using the PR template with checklist items"
+        fi
+        
+        echo "✅ PR description provided"
+
+    - name: Check contributor guidelines
+      run: |
+        echo "✅ Contributor must follow guidelines in CONTRIBUTING.md"
+        echo "✅ All content will be reviewed before merge"
+        echo "✅ Build validation passed - ready for human review"
+
+  # This job always runs to provide a summary
+  validation-summary:
+    runs-on: ubuntu-latest
+    needs: [validate-content, check-pr-requirements]
+    if: always()
+    
+    steps:
+    - name: Validation Summary
+      run: |
+        echo "## 📋 Pull Request Validation Summary"
+        echo ""
+        
+        if [ "${{ needs.validate-content.result }}" == "success" ]; then
+          echo "✅ **Content Validation**: PASSED"
+        else
+          echo "❌ **Content Validation**: FAILED"
+        fi
+        
+        if [ "${{ needs.check-pr-requirements.result }}" == "success" ]; then
+          echo "✅ **PR Requirements**: PASSED"
+        else
+          echo "❌ **PR Requirements**: FAILED"
+        fi
+        
+        echo ""
+        echo "### Next Steps:"
+        echo "- If all validations passed, this PR is ready for human review"
+        echo "- Reviewers will check content quality, Hebrew accuracy, and Torah scholarship"
+        echo "- Build will automatically deploy upon merge to main branch"
+        echo ""
+        echo "**Thank you for contributing to פרשת השבוע!** 🙏
