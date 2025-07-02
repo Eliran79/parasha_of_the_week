@@ -1107,10 +1107,19 @@ self.addEventListener('fetch', function(event) {{
         if css_source.exists():
             shutil.copy2(css_source, self.output_dir / "assets" / "css" / "style.css")
         
-        # Copy JS
+        # Copy and process JS (replace hardcoded paths with base_path)
         js_source = Path("assets/js/main.js")
         if js_source.exists():
-            shutil.copy2(js_source, self.output_dir / "assets" / "js" / "main.js")
+            with open(js_source, 'r', encoding='utf-8') as f:
+                js_content = f.read()
+            
+            # Replace hardcoded paths with base_path
+            js_content = js_content.replace("'/articles.json'", f"'{self.base_path}/articles.json'")
+            js_content = js_content.replace('"/articles/', f'"{self.base_path}/articles/')
+            js_content = js_content.replace("'/sw.js'", f"'{self.base_path}/sw.js'")
+            
+            with open(self.output_dir / "assets" / "js" / "main.js", 'w', encoding='utf-8') as f:
+                f.write(js_content)
         
         # Copy images
         if self.images_dir.exists():
