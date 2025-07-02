@@ -45,11 +45,37 @@ parasha-week/
 
 ## 🛠️ **Quick Start**
 
-### **For Development:**
+### **🔒 Contributing (Secure Workflow)**
+**All content contributions must go through Pull Request review:**
+
+```bash
+# Fork the repository on GitHub first, then:
+git clone https://github.com/YOUR-USERNAME/parasha_of_the_week.git
+cd parasha_of_the_week
+
+# Create a branch for your article
+git checkout -b parasha-[name]-[year]
+
+# Add your content (see CONTRIBUTING.md for guidelines)
+# content/parasha_[name]_[year].md
+# images/[name]_[year].jpg (optional)
+
+# Commit and push
+git add .
+git commit -m "Add פרשת [name]: [brief Hebrew description]"
+git push origin parasha-[name]-[year]
+
+# Create Pull Request on GitHub for review
+```
+
+### **🚀 For Repository Owners:**
 ```bash
 # Clone and setup
 git clone <your-repo>
 cd parasha-week
+
+# Enable branch protection (see .github/branch-protection.md)
+# Settings → Branches → Add rule for 'main'
 
 # Test locally (optional)
 python -m venv venv
@@ -57,16 +83,17 @@ source venv/bin/activate
 pip install -r requirements.txt
 python tests/test_build.py
 
-# Add content and commit
+# Direct commits only for maintenance (content goes via PR)
 git add .
-git commit -m "פרשת [name]: [description]"
+git commit -m "Maintenance: [description]"
 git push
 ```
 
-### **For GitHub Pages:**
+### **📄 For GitHub Pages Setup:**
 1. **Enable GitHub Pages** → Settings → Pages → Source: "GitHub Actions"
-2. **Commit any change** → Auto-deploys in ~2 minutes
-3. **Visit your site** → `https://username.github.io/repo-name`
+2. **Configure branch protection** → See `.github/branch-protection.md`
+3. **Merge approved PRs** → Auto-deploys in ~2 minutes
+4. **Visit your site** → `https://username.github.io/repo-name`
 
 ## 🎨 **Sample Content**
 
@@ -98,6 +125,47 @@ The repository includes rich Hebrew content like:
 
 *Credits appear on every page of the generated website*
 
+## 🔒 **Security & Quality Assurance**
+
+This repository implements comprehensive security measures:
+
+### **Branch Protection**
+- ✅ **Main branch protected** - No direct commits allowed
+- ✅ **Pull Request required** - All changes reviewed before merge
+- ✅ **Status checks enforced** - Automated validation must pass
+- ✅ **Review approval needed** - Human oversight for all content
+
+### **Automated Validation**
+- 🔍 **YAML frontmatter validation** - Ensures proper metadata
+- 📝 **Hebrew text verification** - UTF-8 encoding and RTL formatting
+- 🖼️ **Image optimization** - Size limits and format validation
+- 🔧 **Build process testing** - Verifies site generation works
+- 🛡️ **Security scanning** - Prevents malicious content
+
+### **Content Quality Standards**
+- 📚 **Hebrew language accuracy** - Grammar and spelling checked
+- 🔬 **Technical correctness** - Mathematical and scientific validation
+- 📖 **Torah scholarship** - Respectful and accurate religious content
+- 🎯 **Project alignment** - Maintains mission and quality standards
+
+### **Contributor Guidelines**
+- 📋 **See CONTRIBUTING.md** - Complete submission guidelines
+- 🚨 **See SECURITY.md** - Security policies and procedures
+- 🔧 **Use PR templates** - Guided submission process
+- 👥 **Community standards** - Respectful and collaborative environment
+
 ---
 
-**Ready to launch?** Just commit to GitHub and watch your Hebrew tech blog come to life! 🚀
+## 🚀 **Ready to Contribute?**
+
+1. **Read [CONTRIBUTING.md](.github/CONTRIBUTING.md)** for detailed guidelines
+2. **Fork the repository** and create a feature branch  
+3. **Submit a Pull Request** with your Hebrew article
+4. **Wait for review** and address feedback
+5. **Celebrate** when your contribution goes live! 🎉
+
+**Questions?** Create an issue or contact the maintainers.
+
+---
+
+*This project bridges ancient wisdom with modern technology while maintaining the highest standards of quality and security.* ✨

@@ -1,0 +1,45 @@
+# Code Owners for פרשת השבוע
+
+# Global ownership - repository maintainer has oversight of all changes
+* @eliran-sabag
+
+# Content files require review from content team
+content/ @eliran-sabag
+content/*.md @eliran-sabag
+
+# Images require content review
+images/ @eliran-sabag
+images/*.jpg @eliran-sabag
+images/*.png @eliran-sabag
+images/*.jpeg @eliran-sabag
+images/*.webp @eliran-sabag
+
+# Build scripts and technical files require technical review
+scripts/ @eliran-sabag
+scripts/*.py @eliran-sabag
+requirements.txt @eliran-sabag
+
+# Website assets and styling
+assets/ @eliran-sabag
+assets/css/ @eliran-sabag
+assets/js/ @eliran-sabag
+
+# GitHub configuration files
+.github/ @eliran-sabag
+.github/workflows/ @eliran-sabag
+.github/ISSUE_TEMPLATE/ @eliran-sabag
+
+# Documentation files
+*.md @eliran-sabag
+CONTRIBUTING.md @eliran-sabag
+README.md @eliran-sabag
+CLAUDE.md @eliran-sabag
+
+# Configuration files
+.gitignore @eliran-sabag
+.yamllint @eliran-sabag
+
+# Note: Replace @eliran-sabag with actual GitHub usernames of:
+# - Content reviewers (Hebrew language experts, Torah scholars)
+# - Technical reviewers (Python developers, web developers)
+# - Repository maintainers (project owners)
