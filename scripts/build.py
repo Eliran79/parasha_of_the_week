@@ -10,6 +10,7 @@ from datetime import datetime
 import markdown
 from markdown.extensions import codehilite, tables, toc
 import shutil
+from PIL import Image
 
 class ParashaWebsiteBuilder:
     def __init__(self, content_dir="content", output_dir="docs", images_dir="images"):
@@ -53,8 +54,8 @@ class ParashaWebsiteBuilder:
     <meta property="og:title" content="{{page_title}}">
     <meta property="og:description" content="{{description}}">
     <meta property="og:image" content="{{image_url}}">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:image:width" content="{{image_width}}">
+    <meta property="og:image:height" content="{{image_height}}">
     <meta property="og:image:alt" content="{{page_title}}">
     <meta property="og:type" content="{{og_type}}">
     <meta property="og:locale" content="he_IL">
@@ -67,6 +68,9 @@ class ParashaWebsiteBuilder:
     <meta name="twitter:title" content="{{page_title}}">
     <meta name="twitter:description" content="{{description}}">
     <meta name="twitter:image" content="{{image_url}}">
+    
+    <!-- WhatsApp specific -->
+    <meta property="og:image:type" content="image/jpeg">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{{canonical_url}}">
@@ -459,6 +463,8 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{keywords}}', 'פרשת השבוע, מתמטיקה, מדע נתונים, בינה מלאכותית, יהדות, טכנולוגיה')
         page_html = page_html.replace('{{author}}', 'אלירן סבג')
         page_html = page_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/logo.png')
+        page_html = page_html.replace('{{image_width}}', '1200')
+        page_html = page_html.replace('{{image_height}}', '630')
         page_html = page_html.replace('{{og_type}}', 'website')
         page_html = page_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/')
         page_html = page_html.replace('{{article_meta}}', '')
@@ -531,6 +537,11 @@ class ParashaWebsiteBuilder:
         else:
             absolute_image_url = f"https://Eliran79.github.io/parasha_of_the_week/{article['image']}"
         page_html = page_html.replace('{{image_url}}', absolute_image_url)
+        
+        # Get actual image dimensions
+        width, height = self.get_image_dimensions(article['image'])
+        page_html = page_html.replace('{{image_width}}', str(width))
+        page_html = page_html.replace('{{image_height}}', str(height))
         page_html = page_html.replace('{{og_type}}', 'article')
         page_html = page_html.replace('{{canonical_url}}', f"https://Eliran79.github.io/parasha_of_the_week/articles/{article['slug']}.html")
         article_meta_tags = f'''<meta property="article:published_time" content="{article['date']}T00:00:00Z">
@@ -684,6 +695,8 @@ class ParashaWebsiteBuilder:
         about_html = about_html.replace('{{keywords}}', 'אודות, פרשת השבוע, מתמטיקה, מדע נתונים')
         about_html = about_html.replace('{{author}}', 'אלירן סבג')
         about_html = about_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/about.png')
+        about_html = about_html.replace('{{image_width}}', '1200')
+        about_html = about_html.replace('{{image_height}}', '630')
         about_html = about_html.replace('{{og_type}}', 'website')
         about_html = about_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/about.html')
         about_html = about_html.replace('{{article_meta}}', '')
@@ -774,6 +787,8 @@ class ParashaWebsiteBuilder:
         contact_html = contact_html.replace('{{keywords}}', 'צור קשר, אלירן סבג, פרשת השבוע')
         contact_html = contact_html.replace('{{author}}', 'אלירן סבג')
         contact_html = contact_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/contact.png')
+        contact_html = contact_html.replace('{{image_width}}', '1200')
+        contact_html = contact_html.replace('{{image_height}}', '630')
         contact_html = contact_html.replace('{{og_type}}', 'website')
         contact_html = contact_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/contact.html')
         contact_html = contact_html.replace('{{article_meta}}', '')
@@ -872,6 +887,8 @@ class ParashaWebsiteBuilder:
         archive_html = archive_html.replace('{{keywords}}', 'ארכיון, פרשות, מאמרים')
         archive_html = archive_html.replace('{{author}}', 'אלירן סבג')
         archive_html = archive_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/archive.png')
+        archive_html = archive_html.replace('{{image_width}}', '1200')
+        archive_html = archive_html.replace('{{image_height}}', '630')
         archive_html = archive_html.replace('{{og_type}}', 'website')
         archive_html = archive_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/archive.html')
         archive_html = archive_html.replace('{{article_meta}}', '')
@@ -973,6 +990,8 @@ class ParashaWebsiteBuilder:
         tags_html = tags_html.replace('{{keywords}}', 'תגיות, נושאים, פרשות')
         tags_html = tags_html.replace('{{author}}', 'אלירן סבג')
         tags_html = tags_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/tags.png')
+        tags_html = tags_html.replace('{{image_width}}', '1200')
+        tags_html = tags_html.replace('{{image_height}}', '630')
         tags_html = tags_html.replace('{{og_type}}', 'website')
         tags_html = tags_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/tags.html')
         tags_html = tags_html.replace('{{article_meta}}', '')
@@ -1128,6 +1147,27 @@ self.addEventListener('fetch', function(event) {{
             except yaml.YAMLError as e:
                 print(f"Error parsing YAML frontmatter: {e}")
         return {}, content
+    
+    def get_image_dimensions(self, image_path):
+        """Get dimensions of an image file"""
+        try:
+            # Handle both relative and absolute paths
+            if image_path.startswith('/parasha_of_the_week/'):
+                local_path = self.images_dir / image_path.replace('/parasha_of_the_week/images/', '')
+            elif image_path.startswith('/'):
+                local_path = Path(image_path[1:])  # Remove leading slash
+            else:
+                local_path = self.images_dir / image_path
+            
+            if local_path.exists():
+                with Image.open(local_path) as img:
+                    return img.size  # Returns (width, height)
+            else:
+                print(f"Warning: Image not found: {local_path}")
+                return (1200, 630)  # Default fallback
+        except Exception as e:
+            print(f"Error reading image dimensions for {image_path}: {e}")
+            return (1200, 630)  # Default fallback
     
     def find_matching_image(self, filename):
         """Find matching image for article with year-based naming"""
