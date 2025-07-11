@@ -22,4 +22,3 @@ year: 2025
 🎯 מה מעניין פה? שלמרות תנאי העבדות הקשים והגזרות, עם ישראל הצליח להגיע לקצב גידול שדומה לתקופות השגשוג הגדולות בהיסטוריה האנושית.
 מצורף גרף שמדגים את הגידול המדהים הזה 📊
 *כמו תמיד - זה רק ניסוי מחשבתי מהנה שמשלב בין מדע, מתמטיקה ופרשת השבוע 🙏
-hashtag#דאטהסיינס hashtag#פרשתהשבוע hashtag#ויגש hashtag#מתמטיקה hashtag#דמוגרפיה hashtag#חדשנות hashtag#יהדות hashtag#מסורת

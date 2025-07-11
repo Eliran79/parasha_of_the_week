@@ -32,4 +32,3 @@ year: 2025
 
 זכרו: בפעם הבאה שאתם מנתחים נתונים - שאלו את עצמכם מה אתם רוצים לגלות, ובדקו אם זה משפיע על מה שאתם באמת רואים! 🎯
 
-hashtag#פרשתשלח hashtag#DataScience hashtag#ביאסבנתונים hashtag#מדעהנתונים hashtag#ניתוחנתונים hashtag#יהדותוטכנולוגיה hashtag#פרשתהשבוע hashtag#מרגלים hashtag#החלטותעסקיות

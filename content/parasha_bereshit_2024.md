@@ -24,6 +24,5 @@ year: 2024
 
 כמובן שזה רק משחק מספרים ומודל מתמטי פשטני, אבל זו דרך נחמדה להראות איך אפשר לחבר בין עולם המדע והתכנות לבין המסורת והפרשה 🤝
 
-hashtag#דאטהסיינס hashtag#פרשתהשבוע hashtag#בראשית hashtag#פייתון hashtag#מדעהנתונים hashtag#חדשנות hashtag#יהדות hashtag#מסורת
 
 *הערה: זהו ניסוי מחשבתי בלבד לצרכי השראה והנאה, לא ניסיון להוכחה מדעית או דתית 🙏

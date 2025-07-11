@@ -83,5 +83,4 @@ year: 2025
 
 
 
-hashtag#פרשתתצווה hashtag#מדעויהדות hashtag#מתמטיקהבטבע hashtag#אבניחן hashtag#מינרלוגיה
 
