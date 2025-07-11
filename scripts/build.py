@@ -43,6 +43,21 @@ class ParashaWebsiteBuilder:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Open Graph MUST be first for WhatsApp -->
+    <meta property="og:title" content="{{page_title}}">
+    <meta property="og:description" content="{{description}}">
+    <meta property="og:url" content="{{canonical_url}}">
+    <meta property="og:image" content="{{image_url}}">
+    <meta property="og:image:width" content="{{image_width}}">
+    <meta property="og:image:height" content="{{image_height}}">
+    <meta property="og:image:alt" content="{{page_title}}">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:type" content="{{og_type}}">
+    <meta property="og:site_name" content="פרשת השבוע">
+    <meta property="og:locale" content="he_IL">
+    {{article_meta}}
+    
     <title>{{page_title}}</title>
     
     <!-- SEO Meta Tags -->
@@ -50,27 +65,11 @@ class ParashaWebsiteBuilder:
     <meta name="keywords" content="{{keywords}}">
     <meta name="author" content="{{author}}">
     
-    <!-- Open Graph -->
-    <meta property="og:title" content="{{page_title}}">
-    <meta property="og:description" content="{{description}}">
-    <meta property="og:image" content="{{image_url}}">
-    <meta property="og:image:width" content="{{image_width}}">
-    <meta property="og:image:height" content="{{image_height}}">
-    <meta property="og:image:alt" content="{{page_title}}">
-    <meta property="og:type" content="{{og_type}}">
-    <meta property="og:locale" content="he_IL">
-    <meta property="og:url" content="{{canonical_url}}">
-    <meta property="og:site_name" content="פרשת השבוע">
-    {{article_meta}}
-    
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{page_title}}">
     <meta name="twitter:description" content="{{description}}">
     <meta name="twitter:image" content="{{image_url}}">
-    
-    <!-- WhatsApp specific -->
-    <meta property="og:image:type" content="image/jpeg">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{{canonical_url}}">
