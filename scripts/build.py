@@ -458,7 +458,7 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{description}}', 'חיבור בין פרשיות התורה למתמטיקה, מדע הנתונים, בינה מלאכותית ועולם הסטארטאפים')
         page_html = page_html.replace('{{keywords}}', 'פרשת השבוע, מתמטיקה, מדע נתונים, בינה מלאכותית, יהדות, טכנולוגיה')
         page_html = page_html.replace('{{author}}', 'אלירן סבג')
-        page_html = page_html.replace('{{image_url}}', f'{self.base_path}/images/logo.png')
+        page_html = page_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/logo.png')
         page_html = page_html.replace('{{og_type}}', 'website')
         page_html = page_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/')
         page_html = page_html.replace('{{article_meta}}', '')
@@ -523,7 +523,14 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{description}}', article['excerpt'])
         page_html = page_html.replace('{{keywords}}', ', '.join(article['tags']))
         page_html = page_html.replace('{{author}}', article.get('author', 'אלירן סבג'))
-        page_html = page_html.replace('{{image_url}}', article['image'])
+        # Convert relative image path to absolute URL for Open Graph
+        if article['image'].startswith('/parasha_of_the_week/'):
+            absolute_image_url = f"https://Eliran79.github.io{article['image']}"
+        elif article['image'].startswith('/'):
+            absolute_image_url = f"https://Eliran79.github.io/parasha_of_the_week{article['image']}"
+        else:
+            absolute_image_url = f"https://Eliran79.github.io/parasha_of_the_week/{article['image']}"
+        page_html = page_html.replace('{{image_url}}', absolute_image_url)
         page_html = page_html.replace('{{og_type}}', 'article')
         page_html = page_html.replace('{{canonical_url}}', f"https://Eliran79.github.io/parasha_of_the_week/articles/{article['slug']}.html")
         article_meta_tags = f'''<meta property="article:published_time" content="{article['date']}T00:00:00Z">
@@ -676,7 +683,7 @@ class ParashaWebsiteBuilder:
         about_html = about_html.replace('{{description}}', 'אודות פרויקט פרשת השבוע - חיבור בין חכמת התורה למתמטיקה ומדע הנתונים')
         about_html = about_html.replace('{{keywords}}', 'אודות, פרשת השבוע, מתמטיקה, מדע נתונים')
         about_html = about_html.replace('{{author}}', 'אלירן סבג')
-        about_html = about_html.replace('{{image_url}}', f'{self.base_path}/images/about.png')
+        about_html = about_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/about.png')
         about_html = about_html.replace('{{og_type}}', 'website')
         about_html = about_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/about.html')
         about_html = about_html.replace('{{article_meta}}', '')
@@ -766,7 +773,7 @@ class ParashaWebsiteBuilder:
         contact_html = contact_html.replace('{{description}}', 'יצירת קשר עם אלירן סבג, יוצר פרויקט פרשת השבוע')
         contact_html = contact_html.replace('{{keywords}}', 'צור קשר, אלירן סבג, פרשת השבוע')
         contact_html = contact_html.replace('{{author}}', 'אלירן סבג')
-        contact_html = contact_html.replace('{{image_url}}', f'{self.base_path}/images/contact.png')
+        contact_html = contact_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/contact.png')
         contact_html = contact_html.replace('{{og_type}}', 'website')
         contact_html = contact_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/contact.html')
         contact_html = contact_html.replace('{{article_meta}}', '')
@@ -864,7 +871,7 @@ class ParashaWebsiteBuilder:
         archive_html = archive_html.replace('{{description}}', 'ארכיון כל המאמרים בפרשת השבוע')
         archive_html = archive_html.replace('{{keywords}}', 'ארכיון, פרשות, מאמרים')
         archive_html = archive_html.replace('{{author}}', 'אלירן סבג')
-        archive_html = archive_html.replace('{{image_url}}', f'{self.base_path}/images/archive.png')
+        archive_html = archive_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/archive.png')
         archive_html = archive_html.replace('{{og_type}}', 'website')
         archive_html = archive_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/archive.html')
         archive_html = archive_html.replace('{{article_meta}}', '')
@@ -965,7 +972,7 @@ class ParashaWebsiteBuilder:
         tags_html = tags_html.replace('{{description}}', 'מאמרים מאורגנים לפי תגיות ונושאים')
         tags_html = tags_html.replace('{{keywords}}', 'תגיות, נושאים, פרשות')
         tags_html = tags_html.replace('{{author}}', 'אלירן סבג')
-        tags_html = tags_html.replace('{{image_url}}', f'{self.base_path}/images/tags.png')
+        tags_html = tags_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/tags.png')
         tags_html = tags_html.replace('{{og_type}}', 'website')
         tags_html = tags_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/tags.html')
         tags_html = tags_html.replace('{{article_meta}}', '')
