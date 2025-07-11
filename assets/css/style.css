@@ -453,21 +453,23 @@ blockquote {
     margin-bottom: var(--space-2xl);
     padding-bottom: var(--space-xl);
     border-bottom: 1px solid var(--border-color);
-    position: relative;
-    z-index: 1;
+    overflow: hidden;
+}
+
+.article-hero {
+    margin-bottom: var(--space-xl);
+    overflow: hidden;
 }
 
 .article-hero-image {
     width: 100%;
     max-width: 600px;
     height: 300px;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: var(--radius-lg);
     margin-bottom: var(--space-2xl);
     box-shadow: var(--shadow-lg);
     display: block;
-    position: relative;
-    z-index: 1;
 }
 
 .article-title {
@@ -492,9 +494,7 @@ blockquote {
     font-size: 1.1rem;
     line-height: 1.8;
     color: var(--text-primary);
-    margin-top: var(--space-xl);
-    position: relative;
-    z-index: 2;
+    clear: both;
 }
 
 .article-content h2 {
