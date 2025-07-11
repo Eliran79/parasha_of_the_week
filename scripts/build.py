@@ -54,7 +54,7 @@ class ParashaWebsiteBuilder:
     <meta property="og:image:width" content="{{image_width}}">
     <meta property="og:image:height" content="{{image_height}}">
     <meta property="og:image:alt" content="{{page_title}}">
-    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:type" content="{{image_type}}">
     <meta property="og:site_name" content="פרשת השבוע">
     <meta property="og:locale" content="he_IL">
     {{article_meta}}
@@ -465,6 +465,7 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/logo.png')
         page_html = page_html.replace('{{image_width}}', '1200')
         page_html = page_html.replace('{{image_height}}', '630')
+        page_html = page_html.replace('{{image_type}}', 'image/png')
         page_html = page_html.replace('{{og_type}}', 'website')
         page_html = page_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/')
         page_html = page_html.replace('{{article_meta}}', '')
@@ -542,6 +543,10 @@ class ParashaWebsiteBuilder:
         width, height = self.get_image_dimensions(article['image'])
         page_html = page_html.replace('{{image_width}}', str(width))
         page_html = page_html.replace('{{image_height}}', str(height))
+        
+        # Set correct image type based on file extension
+        image_type = "image/webp" if article['image'].endswith('.webp') else "image/jpeg"
+        page_html = page_html.replace('{{image_type}}', image_type)
         page_html = page_html.replace('{{og_type}}', 'article')
         page_html = page_html.replace('{{canonical_url}}', f"https://Eliran79.github.io/parasha_of_the_week/articles/{article['slug']}.html")
         article_meta_tags = f'''<meta property="article:published_time" content="{article['date']}T00:00:00Z">
@@ -697,6 +702,7 @@ class ParashaWebsiteBuilder:
         about_html = about_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/about.png')
         about_html = about_html.replace('{{image_width}}', '1200')
         about_html = about_html.replace('{{image_height}}', '630')
+        about_html = about_html.replace('{{image_type}}', 'image/png')
         about_html = about_html.replace('{{og_type}}', 'website')
         about_html = about_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/about.html')
         about_html = about_html.replace('{{article_meta}}', '')
@@ -789,6 +795,7 @@ class ParashaWebsiteBuilder:
         contact_html = contact_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/contact.png')
         contact_html = contact_html.replace('{{image_width}}', '1200')
         contact_html = contact_html.replace('{{image_height}}', '630')
+        contact_html = contact_html.replace('{{image_type}}', 'image/png')
         contact_html = contact_html.replace('{{og_type}}', 'website')
         contact_html = contact_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/contact.html')
         contact_html = contact_html.replace('{{article_meta}}', '')
@@ -889,6 +896,7 @@ class ParashaWebsiteBuilder:
         archive_html = archive_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/archive.png')
         archive_html = archive_html.replace('{{image_width}}', '1200')
         archive_html = archive_html.replace('{{image_height}}', '630')
+        archive_html = archive_html.replace('{{image_type}}', 'image/png')
         archive_html = archive_html.replace('{{og_type}}', 'website')
         archive_html = archive_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/archive.html')
         archive_html = archive_html.replace('{{article_meta}}', '')
@@ -992,6 +1000,7 @@ class ParashaWebsiteBuilder:
         tags_html = tags_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/tags.png')
         tags_html = tags_html.replace('{{image_width}}', '1200')
         tags_html = tags_html.replace('{{image_height}}', '630')
+        tags_html = tags_html.replace('{{image_type}}', 'image/png')
         tags_html = tags_html.replace('{{og_type}}', 'website')
         tags_html = tags_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/tags.html')
         tags_html = tags_html.replace('{{article_meta}}', '')
@@ -1220,7 +1229,13 @@ self.addEventListener('fetch', function(event) {{
         for pattern in image_patterns:
             matches = list(self.images_dir.glob(f"**/{pattern}"))
             if matches:
-                # Return the first match, relative to images directory
+                # Prefer WebP format if available (created by GitHub Actions)
+                webp_matches = [m for m in matches if m.suffix.lower() == '.webp']
+                if webp_matches:
+                    relative_path = webp_matches[0].relative_to(self.images_dir)
+                    return f"{self.base_path}/images/{relative_path}"
+                
+                # Fallback to first match
                 relative_path = matches[0].relative_to(self.images_dir)
                 return f"{self.base_path}/images/{relative_path}"
         
