@@ -48,12 +48,13 @@ class ParashaWebsiteBuilder:
     <meta property="og:title" content="{{page_title}}">
     <meta property="og:description" content="{{description}}">
     <meta property="og:url" content="{{canonical_url}}">
+    <meta property="og:type" content="{{og_type}}">
     <meta property="og:image" content="{{image_url}}">
+    <meta property="og:image:secure_url" content="{{image_url}}">
     <meta property="og:image:width" content="{{image_width}}">
     <meta property="og:image:height" content="{{image_height}}">
     <meta property="og:image:alt" content="{{page_title}}">
     <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:type" content="{{og_type}}">
     <meta property="og:site_name" content="פרשת השבוע">
     <meta property="og:locale" content="he_IL">
     {{article_meta}}
