@@ -1,7 +1,7 @@
 ---
 title: "פרשת במדבר - עקרונות Organizational Design בעולם העתיק"
 parasha: "במדבר"
-date: "2025-05-25"
+date: "2025-05-30"
 tags: ["ניהול", "תרבות_ארגונית", "מנהיגות", "ארגון", "Organizational_Design"]
 emoji: "🏗️"
 excerpt: "מפקד של 603,550 איש המדגים עקרונות מתקדמים של עיצוב ארגוני - מרכז, טבעות ו-Network Effects"

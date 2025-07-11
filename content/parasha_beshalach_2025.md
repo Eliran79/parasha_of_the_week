@@ -1,7 +1,7 @@
 ---
 title: "הסטארטאפ הראשון בהיסטוריה - לקח מפרשת בשלח"
 parasha: "בשלח"
-date: "2025-01-25"
+date: "2025-02-07"
 tags: ["סטארטאפים", "חדשנות", "מנהיגות", "Game_Changer"]
 emoji: "🎯"
 excerpt: "מפרשת בשלח לומדים על חשיבת Pivot מכריעה וזיהוי נקודת המפתח שבאמת משנה את המשחק בעולם הסטארטאפים"

@@ -559,7 +559,7 @@ class ParashaWebsiteBuilder:
 
     def generate_prev_next_navigation(self, current_article):
         """Generate previous/next article navigation"""
-        sorted_articles = sorted(self.articles, key=lambda x: x['date'])
+        sorted_articles = sorted(self.articles, key=lambda x: x['date'], reverse=True)
         current_index = next((i for i, a in enumerate(sorted_articles) if a['id'] == current_article['id']), None)
         
         if current_index is None:
