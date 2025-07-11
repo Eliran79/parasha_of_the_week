@@ -53,9 +53,14 @@ class ParashaWebsiteBuilder:
     <meta property="og:title" content="{{page_title}}">
     <meta property="og:description" content="{{description}}">
     <meta property="og:image" content="{{image_url}}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{page_title}}">
     <meta property="og:type" content="{{og_type}}">
     <meta property="og:locale" content="he_IL">
     <meta property="og:url" content="{{canonical_url}}">
+    <meta property="og:site_name" content="פרשת השבוע">
+    {{article_meta}}
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
@@ -456,6 +461,7 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{image_url}}', f'{self.base_path}/images/logo.png')
         page_html = page_html.replace('{{og_type}}', 'website')
         page_html = page_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/')
+        page_html = page_html.replace('{{article_meta}}', '')
         page_html = page_html.replace('{{extra_head}}', '')
         page_html = page_html.replace('{{extra_scripts}}', '')
 
@@ -519,8 +525,15 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{author}}', article.get('author', 'אלירן סבג'))
         page_html = page_html.replace('{{image_url}}', article['image'])
         page_html = page_html.replace('{{og_type}}', 'article')
-        page_html = page_html.replace('{{canonical_url}}', f"https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html")
-        page_html = page_html.replace('{{extra_head}}', f'<meta property="article:published_time" content="{article["date"]}T00:00:00Z">')
+        page_html = page_html.replace('{{canonical_url}}', f"https://Eliran79.github.io/parasha_of_the_week/articles/{article['slug']}.html")
+        article_meta_tags = f'''<meta property="article:published_time" content="{article['date']}T00:00:00Z">
+    <meta property="article:author" content="{article.get('author', 'אלירן סבג')}">
+    <meta property="article:section" content="{article['parasha']}">'''
+        for tag in article['tags']:
+            article_meta_tags += f'\n    <meta property="article:tag" content="{tag}">'
+        
+        page_html = page_html.replace('{{article_meta}}', article_meta_tags)
+        page_html = page_html.replace('{{extra_head}}', '')
         page_html = page_html.replace('{{extra_scripts}}', '')
 
         # Apply base path to all links
@@ -666,6 +679,7 @@ class ParashaWebsiteBuilder:
         about_html = about_html.replace('{{image_url}}', f'{self.base_path}/images/about.png')
         about_html = about_html.replace('{{og_type}}', 'website')
         about_html = about_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/about.html')
+        about_html = about_html.replace('{{article_meta}}', '')
         about_html = about_html.replace('{{extra_head}}', '')
         about_html = about_html.replace('{{extra_scripts}}', '')
         
@@ -755,6 +769,7 @@ class ParashaWebsiteBuilder:
         contact_html = contact_html.replace('{{image_url}}', f'{self.base_path}/images/contact.png')
         contact_html = contact_html.replace('{{og_type}}', 'website')
         contact_html = contact_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/contact.html')
+        contact_html = contact_html.replace('{{article_meta}}', '')
         contact_html = contact_html.replace('{{extra_head}}', '')
         contact_html = contact_html.replace('{{extra_scripts}}', '')
         
@@ -852,6 +867,7 @@ class ParashaWebsiteBuilder:
         archive_html = archive_html.replace('{{image_url}}', f'{self.base_path}/images/archive.png')
         archive_html = archive_html.replace('{{og_type}}', 'website')
         archive_html = archive_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/archive.html')
+        archive_html = archive_html.replace('{{article_meta}}', '')
         archive_html = archive_html.replace('{{extra_head}}', '')
         archive_html = archive_html.replace('{{extra_scripts}}', '')
         
@@ -952,6 +968,7 @@ class ParashaWebsiteBuilder:
         tags_html = tags_html.replace('{{image_url}}', f'{self.base_path}/images/tags.png')
         tags_html = tags_html.replace('{{og_type}}', 'website')
         tags_html = tags_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/tags.html')
+        tags_html = tags_html.replace('{{article_meta}}', '')
         tags_html = tags_html.replace('{{extra_head}}', '')
         tags_html = tags_html.replace('{{extra_scripts}}', '')
         
