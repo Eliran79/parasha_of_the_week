@@ -27,7 +27,7 @@ We welcome contributions from:
 ```bash
 # Fork the repository on GitHub
 # Then clone your fork
-git clone https://github.com/YOUR-USERNAME/parasha_of_the_week.git
+git clone https://github.com/Eliran79/parasha_of_the_week.git
 cd parasha_of_the_week
 ```
 

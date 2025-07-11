@@ -8,7 +8,7 @@
 
 ### ✅ **ALREADY CREATED (Ready to Deploy):**
 ```
-parasha-week/
+parasha_of_the_week/
 ├── content/                    # 📝 13 Hebrew articles (READY!)
 │   ├── parasha_behar_2025.md       # ✅ Complete with frontmatter
 │   ├── parasha_bereshit_2024.md    # ✅ Mathematical analysis
@@ -66,7 +66,7 @@ git push origin main
 
 ### **Step 3: Wait & Enjoy! ⏱️**
 - **GitHub Actions** runs automatically (~2 minutes)
-- **Website deploys** to `https://YOUR-USERNAME.github.io/parasha-week`
+- **Website deploys** to `https://Eliran79.github.io/parasha_of_the_week`
 - **13 Hebrew articles** go live with full features
 
 ## ✅ **What You Get Automatically:**
@@ -287,7 +287,7 @@ git push origin main
 
 ### **Step 3: Enjoy Your Live Website!**
 - ⏱️ **Wait ~2 minutes** for automatic deployment
-- 🌐 **Visit**: `https://YOUR-USERNAME.github.io/parasha-week`
+- 🌐 **Visit**: `https://Eliran79.github.io/parasha_of_the_week`
 - 🎉 **13+ Hebrew articles** with mathematical analysis go live!
 
 ---

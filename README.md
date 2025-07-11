@@ -33,7 +33,7 @@
 ## 📁 **Repository Structure**
 
 ```
-parasha-week/
+parasha_of_the_week/
 ├── content/                    # 📝 13 Hebrew articles ready to publish
 ├── images/                     # 🖼️ Year-based image matching (shalach_2025.jpg)
 ├── scripts/build.py            # ⚙️ Complete 1000+ line build system
@@ -50,7 +50,7 @@ parasha-week/
 
 ```bash
 # Fork the repository on GitHub first, then:
-git clone https://github.com/YOUR-USERNAME/parasha_of_the_week.git
+git clone https://github.com/Eliran79/parasha_of_the_week.git
 cd parasha_of_the_week
 
 # Create a branch for your article
@@ -72,7 +72,7 @@ git push origin parasha-[name]-[year]
 ```bash
 # Clone and setup
 git clone <your-repo>
-cd parasha-week
+cd parasha_of_the_week
 
 # Enable branch protection (see .github/branch-protection.md)
 # Settings → Branches → Add rule for 'main'

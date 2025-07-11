@@ -171,7 +171,7 @@ class ParashaWebsiteBuilder:
             <div class="cta-section">
                 <h3>רוצה לקבל עדכונים?</h3>
                 <p>עקוב אחרי הפרויקט ב-GitHub לעדכונים על פרשיות חדשות</p>
-                <a href="https://github.com/your-username/parasha-week" class="btn-primary">GitHub →</a>
+                <a href="https://github.com/Eliran79/parasha_of_the_week" class="btn-primary">GitHub →</a>
             </div>
         </div>
         
@@ -386,7 +386,7 @@ class ParashaWebsiteBuilder:
         <footer class="footer">
             <div class="footer-content">
                 <div class="footer-links">
-                    <a href="https://github.com/your-username/parasha-week" class="footer-link">GitHub</a>
+                    <a href="https://github.com/Eliran79/parasha_of_the_week" class="footer-link">GitHub</a>
                     <a href="{{base_path}}/feed.xml" class="footer-link">RSS</a>
                     <a href="{{base_path}}/feed.json" class="footer-link">JSON Feed</a>
                     <a href="{{base_path}}/about.html" class="footer-link">אודות</a>
@@ -455,7 +455,7 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{author}}', 'אלירן סבג')
         page_html = page_html.replace('{{image_url}}', f'{self.base_path}/images/logo.png')
         page_html = page_html.replace('{{og_type}}', 'website')
-        page_html = page_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/')
+        page_html = page_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/')
         page_html = page_html.replace('{{extra_head}}', '')
         page_html = page_html.replace('{{extra_scripts}}', '')
 
@@ -519,7 +519,7 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{author}}', article.get('author', 'אלירן סבג'))
         page_html = page_html.replace('{{image_url}}', article['image'])
         page_html = page_html.replace('{{og_type}}', 'article')
-        page_html = page_html.replace('{{canonical_url}}', f"https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html")
+        page_html = page_html.replace('{{canonical_url}}', f"https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html")
         page_html = page_html.replace('{{extra_head}}', f'<meta property="article:published_time" content="{article["date"]}T00:00:00Z">')
         page_html = page_html.replace('{{extra_scripts}}', '')
 
@@ -665,7 +665,7 @@ class ParashaWebsiteBuilder:
         about_html = about_html.replace('{{author}}', 'אלירן סבג')
         about_html = about_html.replace('{{image_url}}', f'{self.base_path}/images/about.png')
         about_html = about_html.replace('{{og_type}}', 'website')
-        about_html = about_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/about.html')
+        about_html = about_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/about.html')
         about_html = about_html.replace('{{extra_head}}', '')
         about_html = about_html.replace('{{extra_scripts}}', '')
         
@@ -720,7 +720,7 @@ class ParashaWebsiteBuilder:
                         
                         <div class="contact-item">
                             <strong>📂 GitHub:</strong>
-                            <a href="https://github.com/your-username/parasha-week" target="_blank" rel="noopener">parasha-week</a>
+                            <a href="https://github.com/Eliran79/parasha_of_the_week" target="_blank" rel="noopener">parasha-week</a>
                         </div>
                     </div>
                 </section>
@@ -754,7 +754,7 @@ class ParashaWebsiteBuilder:
         contact_html = contact_html.replace('{{author}}', 'אלירן סבג')
         contact_html = contact_html.replace('{{image_url}}', f'{self.base_path}/images/contact.png')
         contact_html = contact_html.replace('{{og_type}}', 'website')
-        contact_html = contact_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/contact.html')
+        contact_html = contact_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/contact.html')
         contact_html = contact_html.replace('{{extra_head}}', '')
         contact_html = contact_html.replace('{{extra_scripts}}', '')
         
@@ -851,7 +851,7 @@ class ParashaWebsiteBuilder:
         archive_html = archive_html.replace('{{author}}', 'אלירן סבג')
         archive_html = archive_html.replace('{{image_url}}', f'{self.base_path}/images/archive.png')
         archive_html = archive_html.replace('{{og_type}}', 'website')
-        archive_html = archive_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/archive.html')
+        archive_html = archive_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/archive.html')
         archive_html = archive_html.replace('{{extra_head}}', '')
         archive_html = archive_html.replace('{{extra_scripts}}', '')
         
@@ -951,7 +951,7 @@ class ParashaWebsiteBuilder:
         tags_html = tags_html.replace('{{author}}', 'אלירן סבג')
         tags_html = tags_html.replace('{{image_url}}', f'{self.base_path}/images/tags.png')
         tags_html = tags_html.replace('{{og_type}}', 'website')
-        tags_html = tags_html.replace('{{canonical_url}}', 'https://your-username.github.io/parasha-week/tags.html')
+        tags_html = tags_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/tags.html')
         tags_html = tags_html.replace('{{extra_head}}', '')
         tags_html = tags_html.replace('{{extra_scripts}}', '')
         
@@ -994,7 +994,7 @@ class ParashaWebsiteBuilder:
         
         # Service Worker
         sw_content = f'''
-const CACHE_NAME = 'parasha-week-v1';
+const CACHE_NAME = 'parasha_of_the_week-v1';
 const urlsToCache = [
   '{self.base_path}/',
   '{self.base_path}/assets/css/style.css',
@@ -1325,8 +1325,8 @@ self.addEventListener('fetch', function(event) {{
             "version": "https://jsonfeed.org/version/1.1",
             "title": "פרשת השבוע",
             "description": "חיבור בין פרשיות התורה למתמטיקה, מדע הנתונים ובינה מלאכותית",
-            "home_page_url": "https://your-username.github.io/parasha-week/",
-            "feed_url": "https://your-username.github.io/parasha-week/feed.json",
+            "home_page_url": "https://Eliran79.github.io/parasha_of_the_week/",
+            "feed_url": "https://Eliran79.github.io/parasha_of_the_week/feed.json",
             "language": "he",
             "items": []
         }
@@ -1335,8 +1335,8 @@ self.addEventListener('fetch', function(event) {{
         latest_articles = sorted(self.articles, key=lambda x: x['date'], reverse=True)[:20]
         for article in latest_articles:
             feed["items"].append({
-                "id": f"https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html",
-                "url": f"https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html",
+                "id": f"https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html",
+                "url": f"https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html",
                 "title": article['title'],
                 "content_html": markdown.markdown(article['content'], extensions=['codehilite', 'tables', 'toc', 'fenced_code']),
                 "summary": article['excerpt'],
@@ -1359,9 +1359,9 @@ self.addEventListener('fetch', function(event) {{
 <channel>
     <title>פרשת השבוע</title>
     <description>חיבור בין פרשיות התורה למתמטיקה, מדע הנתונים ובינה מלאכותית</description>
-    <link>https://your-username.github.io/parasha-week/</link>
+    <link>https://Eliran79.github.io/parasha_of_the_week/</link>
     <language>he</language>
-    <atom:link href="https://your-username.github.io/parasha-week/feed.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="https://Eliran79.github.io/parasha_of_the_week/feed.xml" rel="self" type="application/rss+xml"/>
 '''
         
         for article in latest_articles:
@@ -1369,8 +1369,8 @@ self.addEventListener('fetch', function(event) {{
     <item>
         <title>{article['title']}</title>
         <description>{article['excerpt']}</description>
-        <link>https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html</link>
-        <guid>https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html</guid>
+        <link>https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html</link>
+        <guid>https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html</guid>
         <pubDate>{article['date']}</pubDate>
         <author>{article['author']}</author>
     </item>'''
@@ -1387,17 +1387,17 @@ self.addEventListener('fetch', function(event) {{
         sitemap_content = '''<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://your-username.github.io/parasha-week/</loc>
+        <loc>https://Eliran79.github.io/parasha_of_the_week/</loc>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://your-username.github.io/parasha-week/archive.html</loc>
+        <loc>https://Eliran79.github.io/parasha_of_the_week/archive.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://your-username.github.io/parasha-week/about.html</loc>
+        <loc>https://Eliran79.github.io/parasha_of_the_week/about.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
@@ -1406,7 +1406,7 @@ self.addEventListener('fetch', function(event) {{
         for article in self.articles:
             sitemap_content += f'''
     <url>
-        <loc>https://your-username.github.io/parasha-week{{base_path}}/articles/{article['slug']}.html</loc>
+        <loc>https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html</loc>
         <lastmod>{article['date']}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>

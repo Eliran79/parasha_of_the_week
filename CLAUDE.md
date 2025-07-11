@@ -22,7 +22,7 @@
 ## 📁 Repository Structure
 
 ```
-parasha-week/
+parasha_of_the_week/
 ├── content/                    # 📝 Source content (YOU CREATE)
 │   ├── parasha_behar_2025.md
 │   ├── parasha_bereshit_2024.md
@@ -201,7 +201,7 @@ class ParashaWebsiteBuilder:
 ```bash
 # Setup
 git clone <repo>
-cd parasha-week
+cd parasha_of_the_week
 pip install -r requirements.txt
 
 # Build locally
