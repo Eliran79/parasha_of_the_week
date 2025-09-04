@@ -30,9 +30,6 @@ class ParashaWebsite {
 
     // Setup event listeners
     setupEventListeners() {
-        // Mobile menu toggle
-        this.setupMobileMenu();
-        
         // Smooth scrolling for anchor links
         this.setupSmoothScrolling();
         
@@ -226,20 +223,6 @@ class ParashaWebsite {
         });
     }
 
-    // Setup mobile menu
-    setupMobileMenu() {
-        // Add mobile menu button if needed
-        const nav = document.querySelector('.nav-content');
-        if (window.innerWidth <= 768 && nav) {
-            const menuButton = document.createElement('button');
-            menuButton.className = 'mobile-menu-button';
-            menuButton.innerHTML = '☰';
-            menuButton.addEventListener('click', () => {
-                nav.classList.toggle('mobile-menu-open');
-            });
-            nav.prepend(menuButton);
-        }
-    }
 
     // Setup smooth scrolling
     setupSmoothScrolling() {
