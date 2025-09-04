@@ -239,6 +239,24 @@ blockquote {
     margin: 0 auto;
 }
 
+.dedication {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+}
+
+.dedication-text {
+    font-size: 1rem;
+    font-style: italic;
+    opacity: 0.85;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 500px;
+    margin: 0 auto;
+    letter-spacing: 0.02em;
+}
+
 /* Navigation */
 .nav {
     background-color: rgba(255, 255, 255, 0.95);

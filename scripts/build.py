@@ -149,6 +149,9 @@ class ParashaWebsiteBuilder:
         <div class="header-content">
             <h1 class="site-title">פרשת השבוע</h1>
             <p class="site-subtitle">חיבור בין חכמת התורה למתמטיקה, מדע הנתונים ובינה מלאכותית</p>
+            <div class="dedication">
+                <p class="dedication-text">לעילוי נשמת אבי ומורי יונתן סבג בן מסודי ז״ל</p>
+            </div>
         </div>
     </header>
 
@@ -425,7 +428,7 @@ class ParashaWebsiteBuilder:
         
         # Generate articles HTML
         articles_html = ""
-        for i, article in enumerate(sorted_articles[:9]):  # Show 9 most recent
+        for i, article in enumerate(sorted_articles):  # Show all articles
             featured_class = "featured" if i < 3 else ""
             articles_html += f'''
             <article class="article-card {featured_class}" data-article-id="{article['id']}">
