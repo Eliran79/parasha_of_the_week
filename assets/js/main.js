@@ -116,8 +116,8 @@ class ParashaWebsite {
     createArticleCard(article) {
         return `
             <article class="article-card" data-article-id="${article.id}">
-                <div class="article-image" style="background-image: url('${article.image}')">
-                    <span class="article-emoji">${article.emoji}</span>
+                <div class="article-image" style="background-image: url('${article.image || ''}')">
+                    <span class="article-emoji">${article.emoji || '📖'}</span>
                 </div>
                 <div class="article-content">
                     <div class="article-meta">
