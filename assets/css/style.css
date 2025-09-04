@@ -459,13 +459,14 @@ blockquote {
 
 .article-hero-image {
     width: 100%;
-    max-width: 600px;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
     border-radius: var(--radius-lg);
     margin-bottom: var(--space-2xl);
     box-shadow: var(--shadow-lg);
     display: block;
+    background: var(--bg-secondary);
 }
 
 .article-title {
@@ -739,7 +740,7 @@ blockquote {
     }
     
     .article-hero-image {
-        max-width: 100%;
+        max-height: 50vh;
         margin: 0 auto var(--space-2xl) auto;
     }
     
@@ -786,6 +787,11 @@ blockquote {
     
     .search-input {
         padding: var(--space-md);
+    }
+    
+    .article-hero-image {
+        max-height: 40vh;
+        border-radius: var(--radius-md);
     }
 }
 
