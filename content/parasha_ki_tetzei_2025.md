@@ -1,7 +1,7 @@
 ---
 title: "פרשת כי תצא: כשמשה רבינו המציא אלגוריתמים גנטיים - העקרונות העתיקים של Evolutionary Computing"
 parasha: "כי תצא"
-date: "2025-08-29"
+date: "2025-09-04"
 tags: ["אלגוריתמים_גנטיים", "בינה_מלאכותית", "גיוון_ביולוגי", "אבולוציה_מחשובית", "מדע_הנתונים", "אופטימיזציה"]
 emoji: "🧬"
 excerpt: "שילוח הקן ואיסור כלאיים חושפים את העקרונות המתוחכמים של Evolutionary Computing - מבוקר, בר-קיימא ועם שימור גיוון גנטי"
