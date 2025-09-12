@@ -482,6 +482,7 @@ blockquote {
 .article-hero {
     margin-bottom: var(--space-xl);
     overflow: hidden;
+    text-align: center;
 }
 
 .article-hero-image {
@@ -490,8 +491,9 @@ blockquote {
     height: 400px;
     max-height: 70vh;
     object-fit: cover;
+    object-position: center;
     border-radius: var(--radius-lg);
-    margin-bottom: var(--space-2xl);
+    margin: 0 auto var(--space-2xl) auto;
     box-shadow: var(--shadow-lg);
     display: block;
     background: var(--bg-secondary);
@@ -782,13 +784,27 @@ blockquote {
         margin: 0 auto;
     }
     
+    .article-header {
+        width: 100%;
+        max-width: 100%;
+        text-align: center;
+    }
+    
+    .article-hero {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
     .article-hero-image {
         height: 300px;
         max-height: 50vh;
         width: 100%;
         max-width: 100%;
         object-fit: cover;
-        margin-bottom: var(--space-2xl);
+        object-position: center;
+        margin: 0 auto var(--space-2xl) auto;
+        display: block;
     }
     
     .article-title {
@@ -845,14 +861,28 @@ blockquote {
         padding: 0 var(--space-md);
     }
     
+    .article-header {
+        width: 100%;
+        max-width: 100%;
+        text-align: center;
+    }
+    
+    .article-hero {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
     .article-hero-image {
         height: 250px;
         max-height: 40vh;
         width: 100%;
         max-width: 100%;
         object-fit: cover;
+        object-position: center;
         border-radius: var(--radius-md);
-        margin-bottom: var(--space-lg);
+        margin: 0 auto var(--space-lg) auto;
+        display: block;
     }
 }
 
