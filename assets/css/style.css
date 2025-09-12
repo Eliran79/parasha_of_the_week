@@ -788,7 +788,6 @@ blockquote {
         width: 100%;
         max-width: 100%;
         text-align: center;
-        direction: rtl;
     }
     
     .article-hero {
@@ -810,15 +809,12 @@ blockquote {
     
     .article-title {
         font-size: 2rem;
-        text-align: center;
-        direction: rtl;
     }
     
     .article-meta {
         flex-direction: column;
         gap: var(--space-sm);
         text-align: center;
-        direction: rtl;
     }
     
     .footer-links {
@@ -869,7 +865,6 @@ blockquote {
         width: 100%;
         max-width: 100%;
         text-align: center;
-        direction: rtl;
     }
     
     .article-hero {
