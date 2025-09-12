@@ -460,6 +460,8 @@ blockquote {
 .article-page {
     max-width: 800px;
     margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .article-header {
@@ -485,6 +487,7 @@ blockquote {
     box-shadow: var(--shadow-lg);
     display: block;
     background: var(--bg-secondary);
+    height: auto;
 }
 
 .article-title {
@@ -757,9 +760,17 @@ blockquote {
         gap: var(--space-lg);
     }
     
+    .article-page {
+        padding: 0 var(--space-lg);
+        margin: 0 auto;
+    }
+    
     .article-hero-image {
         max-height: 50vh;
-        margin: 0 auto var(--space-2xl) auto;
+        width: 100%;
+        max-width: 100%;
+        object-fit: contain;
+        margin-bottom: var(--space-2xl);
     }
     
     .article-title {
@@ -807,9 +818,17 @@ blockquote {
         padding: var(--space-md);
     }
     
+    .article-page {
+        padding: 0 var(--space-md);
+    }
+    
     .article-hero-image {
         max-height: 40vh;
+        width: 100%;
+        max-width: 100%;
+        object-fit: contain;
         border-radius: var(--radius-md);
+        margin-bottom: var(--space-lg);
     }
 }
 
