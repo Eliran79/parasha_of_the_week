@@ -83,6 +83,7 @@ body {
     text-align: right;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
 
 /* English Content */
@@ -517,6 +518,19 @@ blockquote {
     font-size: 0.875rem;
 }
 
+.article-meta-wrapper {
+    padding: 0 var(--space-lg);
+    width: 100%;
+}
+
+.article-lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-top: var(--space-lg);
+    font-weight: 400;
+}
+
 .article-content {
     font-size: 1.1rem;
     line-height: 1.8;
@@ -794,11 +808,11 @@ blockquote {
     }
     
     .article-hero {
-        width: calc(100% + 2 * var(--space-md));
-        margin-left: calc(-1 * var(--space-md));
-        margin-right: calc(-1 * var(--space-md));
-        display: flex;
-        justify-content: center;
+        width: 100%;
+        margin: 0 0 var(--space-xl) 0;
+        padding: 0;
+        display: block;
+        text-align: center;
     }
     
     .article-hero-image {
@@ -808,8 +822,9 @@ blockquote {
         max-width: 100%;
         object-fit: cover;
         object-position: center;
-        margin: 0 auto var(--space-2xl) auto;
+        margin: 0 auto;
         display: block;
+        border-radius: 0;
     }
     
     .article-title {
@@ -820,6 +835,10 @@ blockquote {
         flex-direction: column;
         gap: var(--space-sm);
         text-align: center;
+    }
+    
+    .article-meta-wrapper {
+        padding: 0 var(--space-sm);
     }
     
     .footer-links {
@@ -876,11 +895,11 @@ blockquote {
     }
     
     .article-hero {
-        width: calc(100% + 2 * var(--space-sm));
-        margin-left: calc(-1 * var(--space-sm));
-        margin-right: calc(-1 * var(--space-sm));
-        display: flex;
-        justify-content: center;
+        width: 100%;
+        margin: 0 0 var(--space-lg) 0;
+        padding: 0;
+        display: block;
+        text-align: center;
     }
     
     .article-hero-image {
@@ -890,8 +909,8 @@ blockquote {
         max-width: 100%;
         object-fit: cover;
         object-position: center;
-        border-radius: var(--radius-md);
-        margin: 0 auto var(--space-lg) auto;
+        border-radius: 0;
+        margin: 0 auto;
         display: block;
     }
 }
