@@ -15,8 +15,6 @@ year: 2025
 
 **שתהיה שנת קוד נקי, באגים מועטים ודפלויים חלקים** 🚀
 
----
-
 ### שתהיה שנת פשטות ובהירות
 ```python
 def new_year_blessing():
