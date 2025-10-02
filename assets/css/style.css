@@ -953,28 +953,47 @@ blockquote {
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
     :root {
-        --text-primary: #f9fafb;
+        --text-primary: #f3f4f6;
         --text-secondary: #d1d5db;
         --text-muted: #9ca3af;
-        --bg-primary: #111827;
-        --bg-secondary: #1f2937;
-        --bg-tertiary: #374151;
-        --border-color: #374151;
-        --border-light: #4b5563;
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-tertiary: #334155;
+        --border-color: #334155;
+        --border-light: #475569;
     }
-    
+
     .article-card,
     .sidebar-section {
         background-color: var(--bg-secondary);
     }
-    
+
     .search-input {
         background-color: var(--bg-secondary);
         color: var(--text-primary);
     }
-    
+
     .nav {
-        background-color: rgba(31, 41, 55, 0.95);
+        background-color: rgba(30, 41, 59, 0.95);
+    }
+
+    .article-content {
+        color: #e5e7eb;
+    }
+
+    .article-content h2,
+    .article-content h3,
+    h1, h2, h3, h4, h5, h6 {
+        color: #f9fafb;
+    }
+
+    blockquote {
+        background: rgba(37, 99, 235, 0.15);
+        border-right-color: var(--primary-light);
+    }
+
+    .english blockquote {
+        border-left-color: var(--primary-light);
     }
 }
 
