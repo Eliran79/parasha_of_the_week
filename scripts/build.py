@@ -472,7 +472,8 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{og_type}}', 'website')
         page_html = page_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/')
         page_html = page_html.replace('{{article_meta}}', '')
-        page_html = page_html.replace('{{extra_head}}', '')
+        # Add website structured data schema
+        page_html = page_html.replace('{{extra_head}}', self.generate_website_schema())
         page_html = page_html.replace('{{extra_scripts}}', '')
 
         # Apply base path to all links
@@ -559,7 +560,8 @@ class ParashaWebsiteBuilder:
             article_meta_tags += f'\n    <meta property="article:tag" content="{tag}">'
         
         page_html = page_html.replace('{{article_meta}}', article_meta_tags)
-        page_html = page_html.replace('{{extra_head}}', '')
+        # Add structured data schema
+        page_html = page_html.replace('{{extra_head}}', self.generate_article_schema(article))
         page_html = page_html.replace('{{extra_scripts}}', '')
 
         # Apply base path to all links
@@ -1134,12 +1136,24 @@ self.addEventListener('fetch', function(event) {{
         # Generate sitemap
         print("🗺️ Generating sitemap...")
         self.generate_sitemap()
-        
+
+        # Generate robots.txt
+        print("🤖 Generating robots.txt...")
+        self.generate_robots_txt()
+
+        # Generate JSON API for articles
+        print("📊 Generating article JSON API...")
+        self.generate_article_json_api()
+
+        # Generate AI-friendly site index
+        print("🤖 Generating AI site index...")
+        self.generate_ai_index()
+
         # Generate articles metadata
         with open(self.output_dir / "articles.json", 'w', encoding='utf-8') as f:
-            json.dump([{k: v for k, v in article.items() if k != 'content'} 
+            json.dump([{k: v for k, v in article.items() if k != 'content'}
                       for article in self.articles], f, ensure_ascii=False, indent=2)
-        
+
         print(f"✅ Website built successfully!")
         print(f"📊 Statistics:")
         print(f"   - Articles: {len(self.articles)}")
@@ -1465,13 +1479,15 @@ self.addEventListener('fetch', function(event) {{
             f.write(rss_content)
     
     def generate_sitemap(self):
-        """Generate XML sitemap"""
+        """Generate enhanced XML sitemap with image metadata"""
         sitemap_content = '''<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://Eliran79.github.io/parasha_of_the_week/</loc>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
+        <lastmod>''' + datetime.now().strftime('%Y-%m-%d') + '''</lastmod>
     </url>
     <url>
         <loc>https://Eliran79.github.io/parasha_of_the_week/archive.html</loc>
@@ -1479,26 +1495,218 @@ self.addEventListener('fetch', function(event) {{
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://Eliran79.github.io/parasha_of_the_week/tags.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
         <loc>https://Eliran79.github.io/parasha_of_the_week/about.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
 '''
-        
-        for article in self.articles:
+
+        for article in sorted(self.articles, key=lambda x: x['date'], reverse=True):
             sitemap_content += f'''
     <url>
-        <loc>https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html</loc>
+        <loc>https://Eliran79.github.io{self.base_path}/articles/{article['slug']}.html</loc>
         <lastmod>{article['date']}</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
+        <priority>0.9</priority>
+        <image:image>
+            <image:loc>https://Eliran79.github.io{article['image']}</image:loc>
+            <image:title>{article['title']}</image:title>
+        </image:image>
     </url>'''
-        
+
         sitemap_content += '''
 </urlset>'''
-        
+
         with open(self.output_dir / "sitemap.xml", 'w', encoding='utf-8') as f:
             f.write(sitemap_content)
+
+    def generate_robots_txt(self):
+        """Generate robots.txt file for search engines and AI crawlers"""
+        robots_content = f'''# Robots.txt for פרשת השבוע
+User-agent: *
+Allow: /
+Allow: /articles/
+Allow: /images/
+Allow: /assets/
+Allow: /api/
+
+# Sitemaps
+Sitemap: https://Eliran79.github.io{self.base_path}/sitemap.xml
+Sitemap: https://Eliran79.github.io{self.base_path}/feed.xml
+
+# Crawl-delay (be respectful)
+Crawl-delay: 1
+
+# Allow all bots including AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+'''
+
+        with open(self.output_dir / "robots.txt", 'w', encoding='utf-8') as f:
+            f.write(robots_content)
+
+    def generate_article_schema(self, article):
+        """Generate JSON-LD structured data for article"""
+        schema = {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": article['title'],
+            "description": article['excerpt'],
+            "image": f"https://Eliran79.github.io{article['image']}",
+            "datePublished": f"{article['date']}T00:00:00Z",
+            "dateModified": f"{article['date']}T00:00:00Z",
+            "author": {
+                "@type": "Person",
+                "name": article.get('author', 'אלירן סבג'),
+                "email": "eliran.sbg@gmail.com",
+                "url": "https://www.linkedin.com/in/eliran-sabag-51832651/"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "פרשת השבוע",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": f"https://Eliran79.github.io{self.base_path}/images/logo.png"
+                }
+            },
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": f"https://Eliran79.github.io{self.base_path}/articles/{article['slug']}.html"
+            },
+            "keywords": ", ".join(article.get('tags', [])),
+            "articleSection": article.get('parasha', ''),
+            "inLanguage": "he",
+            "about": {
+                "@type": "Thing",
+                "name": article.get('parasha', '')
+            }
+        }
+
+        return f'<script type="application/ld+json">\n{json.dumps(schema, ensure_ascii=False, indent=2)}\n</script>'
+
+    def generate_website_schema(self):
+        """Generate JSON-LD structured data for website"""
+        schema = {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "פרשת השבוע",
+            "description": "חיבור בין פרשיות התורה למתמטיקה, מדע הנתונים ובינה מלאכותית",
+            "url": f"https://Eliran79.github.io{self.base_path}/",
+            "inLanguage": "he",
+            "author": {
+                "@type": "Person",
+                "name": "אלירן סבג",
+                "email": "eliran.sbg@gmail.com",
+                "url": "https://www.linkedin.com/in/eliran-sabag-51832651/"
+            },
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": f"https://Eliran79.github.io{self.base_path}/?q={{search_term_string}}",
+                "query-input": "required name=search_term_string"
+            }
+        }
+
+        return f'<script type="application/ld+json">\n{json.dumps(schema, ensure_ascii=False, indent=2)}\n</script>'
+
+    def generate_article_json_api(self):
+        """Generate JSON API endpoints for each article"""
+        api_dir = self.output_dir / "api" / "articles"
+        api_dir.mkdir(parents=True, exist_ok=True)
+
+        for article in self.articles:
+            article_data = {
+                "title": article['title'],
+                "parasha": article['parasha'],
+                "date": article['date'],
+                "author": article.get('author', 'אלירן סבג'),
+                "tags": article['tags'],
+                "excerpt": article['excerpt'],
+                "content": article['content'],
+                "url": f"https://Eliran79.github.io{self.base_path}/articles/{article['slug']}.html",
+                "image": f"https://Eliran79.github.io{article['image']}",
+                "reading_time": article.get('reading_time', 'N/A'),
+                "slug": article['slug']
+            }
+
+            with open(api_dir / f"{article['slug']}.json", 'w', encoding='utf-8') as f:
+                json.dump(article_data, f, ensure_ascii=False, indent=2)
+
+    def generate_ai_index(self):
+        """Generate AI-friendly site index"""
+        index = {
+            "site": {
+                "name": "פרשת השבוע",
+                "name_english": "Parasha of the Week",
+                "description": "Hebrew tech blog connecting Torah portions with mathematics, data science, and AI",
+                "description_hebrew": "חיבור בין פרשיות התורה למתמטיקה, מדע הנתונים ובינה מלאכותית",
+                "language": "he",
+                "url": f"https://Eliran79.github.io{self.base_path}/",
+                "author": {
+                    "name": "אלירן סבג",
+                    "name_english": "Eliran Sabag",
+                    "email": "eliran.sbg@gmail.com",
+                    "linkedin": "https://www.linkedin.com/in/eliran-sabag-51832651/"
+                },
+                "updated": datetime.now().strftime('%Y-%m-%d')
+            },
+            "content_types": [
+                "Technical Torah Analysis",
+                "Mathematical Models in Biblical Context",
+                "Data Science Insights",
+                "AI and Machine Learning Connections",
+                "Startup and Leadership Lessons"
+            ],
+            "statistics": {
+                "total_articles": len(self.articles),
+                "unique_parashot": len(set(a['parasha'] for a in self.articles)),
+                "total_tags": len(set(tag for a in self.articles for tag in a['tags']))
+            },
+            "articles": [
+                {
+                    "title": article['title'],
+                    "url": f"https://Eliran79.github.io{self.base_path}/articles/{article['slug']}.html",
+                    "api_url": f"https://Eliran79.github.io{self.base_path}/api/articles/{article['slug']}.json",
+                    "parasha": article['parasha'],
+                    "date": article['date'],
+                    "tags": article['tags'],
+                    "excerpt": article['excerpt'],
+                    "reading_time": article.get('reading_time', 'N/A')
+                }
+                for article in sorted(self.articles, key=lambda x: x['date'], reverse=True)
+            ],
+            "feeds": {
+                "rss": f"https://Eliran79.github.io{self.base_path}/feed.xml",
+                "json": f"https://Eliran79.github.io{self.base_path}/feed.json"
+            },
+            "tags": list(set(tag for a in self.articles for tag in a['tags'])),
+            "parashot": list(set(a['parasha'] for a in self.articles))
+        }
+
+        with open(self.output_dir / "ai-index.json", 'w', encoding='utf-8') as f:
+            json.dump(index, f, ensure_ascii=False, indent=2)
 
 if __name__ == "__main__":
     builder = ParashaWebsiteBuilder()
