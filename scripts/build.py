@@ -1414,6 +1414,11 @@ self.addEventListener('fetch', function(event) {{
             for img_file in self.images_dir.iterdir():
                 if img_file.is_file():
                     shutil.copy2(img_file, self.output_dir / "images" / img_file.name)
+
+        # Copy Google Search Console verification file if exists
+        google_verification = Path("google7619e0f6b0b2836c.html")
+        if google_verification.exists():
+            shutil.copy2(google_verification, self.output_dir / "google7619e0f6b0b2836c.html")
     
     def generate_json_feed(self):
         """Generate JSON feed"""
