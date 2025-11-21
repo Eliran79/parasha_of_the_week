@@ -1,7 +1,7 @@
 ---
 title: "כשנבואה יוצרת מציאות: מודלי שפה שמלמדים את עצמם"
 parasha: "תולדות"
-date: "2024-11-22"
+date: "2025-11-21"
 tags: ["בינה_מלאכותית", "למידת_מכונה", "נבואה", "Self_Fulfilling_Prophecy", "Constitutional_AI", "Model_Collapse"]
 emoji: "🔮"
 excerpt: "רבקה שומעת נבואה ופועלת על פיה - ויוצרת את המציאות שנאמרה לה. כך בדיוק קורה כשמודלי שפה מאמנים מודלים אחרים: הנבואה הופכת למציאות."
