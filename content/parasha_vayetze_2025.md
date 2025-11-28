@@ -133,7 +133,7 @@ GPT-3 (175B פרמטרים): פתאום יודע לפתור chain-of-thought rea
 
 מתמטית:
 
-$$\max_{\pi} \mathbb{E}_{x \sim D, y \sim \pi(y|x)}[r(x,y)] - \beta \cdot D_{\text{KL}}[\pi(y|x) \parallel \pi_{\text{ref}}(y|x)]$$
+$$\max\_{\pi} \mathbb{E}\_{x \sim D, y \sim \pi(y|x)}[r(x,y)] - \beta \cdot D\_{\text{KL}}[\pi(y|x) || \pi\_{\text{ref}}(y|x)]$$
 
 כאשר $\pi$ המדיניות הנלמדת, $r$ ה-reward, $\beta$ מקדם שמונע סטייה רבה מדי מהמודל המקורי.
 
