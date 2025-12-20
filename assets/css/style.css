@@ -487,17 +487,15 @@ blockquote {
 }
 
 .article-hero-image {
-    width: 100%;
+    width: auto;
     max-width: 100%;
-    height: 400px;
-    max-height: 70vh;
-    object-fit: cover;
-    object-position: center;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
     border-radius: var(--radius-lg);
     margin: 0 auto var(--space-2xl) auto;
     box-shadow: var(--shadow-lg);
     display: block;
-    background: var(--bg-secondary);
 }
 
 .article-title {
