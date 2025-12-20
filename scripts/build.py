@@ -18,9 +18,12 @@ class ParashaWebsiteBuilder:
         self.output_dir = Path(output_dir)
         self.images_dir = Path(images_dir)
         self.articles = []
-        
+
         # Base path for GitHub Pages - change to empty string for root domain
         self.base_path = "/parasha_of_the_week"
+
+        # Cache busting version - timestamp at build time
+        self.cache_version = datetime.now().strftime("%Y%m%d%H%M%S")
         
         # Load all templates
         self.templates = {
@@ -31,9 +34,10 @@ class ParashaWebsiteBuilder:
         }
     
     def apply_base_path(self, html_content):
-        """Replace {{base_path}} and {base_path} placeholders with actual base path"""
+        """Replace {{base_path}}, {base_path}, and {{cache_version}} placeholders"""
         html_content = html_content.replace('{{base_path}}', self.base_path)
         html_content = html_content.replace('{base_path}', self.base_path)
+        html_content = html_content.replace('{{cache_version}}', self.cache_version)
         return html_content
 
     def load_base_template(self):
@@ -43,7 +47,12 @@ class ParashaWebsiteBuilder:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
+    <!-- Cache Control - force fresh content -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <!-- Open Graph MUST be first for WhatsApp -->
     <meta property="og:title" content="{{page_title}}">
     <meta property="og:description" content="{{description}}">
@@ -101,7 +110,7 @@ class ParashaWebsiteBuilder:
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     
     <!-- Styles -->
-    <link rel="stylesheet" href="{{base_path}}/assets/css/style.css">
+    <link rel="stylesheet" href="{{base_path}}/assets/css/style.css?v={{cache_version}}">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{base_path}}/manifest.json">
@@ -121,7 +130,7 @@ class ParashaWebsiteBuilder:
     {{content}}
     
     <!-- Scripts -->
-    <script src="{{base_path}}/assets/js/main.js"></script>
+    <script src="{{base_path}}/assets/js/main.js?v={{cache_version}}"></script>
     
     <!-- Re-render MathJax and Prism -->
     <script>
