@@ -793,8 +793,21 @@ blockquote {
     .articles-grid {
         grid-template-columns: 1fr;
         gap: var(--space-lg);
+        width: 100%;
     }
-    
+
+    .article-card {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .article-image {
+        width: 100%;
+        min-width: 100%;
+        background-size: cover;
+        background-position: center center;
+    }
+
     .article-page {
         padding: 0;
         margin: 0 auto;
@@ -861,18 +874,32 @@ blockquote {
     }
     
     .main {
-        padding: var(--space-md);
+        padding: var(--space-sm);
     }
-    
+
     .main.single-article {
         padding: var(--space-md) var(--space-sm);
         max-width: 100%;
         width: 100%;
         box-sizing: border-box;
     }
-    
+
+    .articles-grid {
+        gap: var(--space-md);
+        padding: 0;
+    }
+
+    .article-card {
+        border-radius: var(--radius-md);
+    }
+
+    .article-image {
+        aspect-ratio: 4 / 3;
+    }
+
     .article-content {
         font-size: 1rem;
+        padding: var(--space-md);
     }
     
     .nav-links {
