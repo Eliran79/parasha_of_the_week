@@ -212,15 +212,6 @@ class ParashaWebsite {
             lastScrollTop = scrollTop;
         }, { passive: true });
 
-        // Parallax effect for hero images
-        const heroImages = document.querySelectorAll('.article-hero-image');
-        heroImages.forEach(img => {
-            window.addEventListener('scroll', () => {
-                const scrolled = window.pageYOffset;
-                const parallax = scrolled * 0.5;
-                img.style.transform = `translateY(${parallax}px)`;
-            }, { passive: true });
-        });
     }
 
 
