@@ -1,5 +1,7 @@
 # Parasha of the Week 📚⚡
 
+🌐 **[Live Site → eliran79.github.io/parasha_of_the_week](https://eliran79.github.io/parasha_of_the_week/)**
+
 **Automated Hebrew website** connecting Jewish Torah portions (Parashot) with mathematics, data science, AI, and startup concepts. Each week features deep technical analysis of ancient wisdom through a modern lens.
 
 ## 🎯 **Project Overview**
@@ -93,7 +95,7 @@ git push
 1. **Enable GitHub Pages** → Settings → Pages → Source: "GitHub Actions"
 2. **Configure branch protection** → See `.github/branch-protection.md`
 3. **Merge approved PRs** → Auto-deploys in ~2 minutes
-4. **Visit your site** → `https://username.github.io/repo-name`
+4. **Visit the live site** → [eliran79.github.io/parasha_of_the_week](https://eliran79.github.io/parasha_of_the_week/)
 
 ## 🎨 **Sample Content**
 
