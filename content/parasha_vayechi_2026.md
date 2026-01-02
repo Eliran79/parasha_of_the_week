@@ -1,12 +1,12 @@
 ---
 title: "ברכת השבטים: ארכיטקטורת Mixture of Experts בתורה"
 parasha: "ויחי"
-date: "2025-01-03"
+date: "2026-01-02"
 tags: ["בינה_מלאכותית", "למידת_מכונה", "ארכיטקטורה", "מומחיות", "אנסמבל"]
 emoji: "🎯"
 excerpt: "ברכות יעקב לשבטים חושפות עיקרון מתמטי מודרני: כוח הצוות אינו בהומוגניות אלא בשילוב מומחים ייחודיים"
 author: "אלירן סבג"
-year: 2025
+year: 2026
 ---
 
 # ברכת השבטים: ארכיטקטורת Mixture of Experts בתורה
