@@ -829,11 +829,11 @@ blockquote {
     }
     
     .article-hero-image {
-        height: 300px;
+        height: auto;
         max-height: 50vh;
         width: 100%;
         max-width: 100%;
-        object-fit: cover;
+        object-fit: contain;
         object-position: center;
         margin: 0 auto;
         display: block;
@@ -930,11 +930,11 @@ blockquote {
     }
     
     .article-hero-image {
-        height: 250px;
+        height: auto;
         max-height: 40vh;
         width: 100%;
         max-width: 100%;
-        object-fit: cover;
+        object-fit: contain;
         object-position: center;
         border-radius: 0;
         margin: 0 auto;
