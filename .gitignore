@@ -78,4 +78,5 @@ htmlcov/
 # System files
 *.pid
 *.seed
-*.pid.lock.domguard/
+*.pid.lock
+.domguard/
