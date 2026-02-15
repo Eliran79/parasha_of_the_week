@@ -487,10 +487,10 @@ blockquote {
 }
 
 .article-hero-image {
-    width: auto;
+    width: 100%;
     max-width: 100%;
     height: auto;
-    max-height: 80vh;
+    max-height: 400px;
     object-fit: contain;
     border-radius: var(--radius-lg);
     margin: 0 auto var(--space-2xl) auto;
@@ -830,7 +830,7 @@ blockquote {
     
     .article-hero-image {
         height: auto;
-        max-height: 50vh;
+        max-height: 350px;
         width: 100%;
         max-width: 100%;
         object-fit: contain;
@@ -931,7 +931,7 @@ blockquote {
     
     .article-hero-image {
         height: auto;
-        max-height: 40vh;
+        max-height: 300px;
         width: 100%;
         max-width: 100%;
         object-fit: contain;
