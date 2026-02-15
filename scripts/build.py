@@ -207,7 +207,7 @@ class ParashaWebsiteBuilder:
         return '''
     <header class="header">
         <div class="header-content">
-            <h1 class="site-title">פרשת השבוע</h1>
+            <h1 class="site-title">פרשת {{article.parasha}}</h1>
             <p class="site-subtitle">חיבור בין חכמת התורה למתמטיקה, מדע הנתונים ובינה מלאכותית</p>
         </div>
     </header>
@@ -1327,6 +1327,25 @@ self.addEventListener('fetch', function(event) {{
 
         return fixed_content
 
+    def remove_first_h1(self, content):
+        """
+        Remove the first H1 heading from markdown content.
+        The title is already displayed in the article header template.
+        """
+        # Pattern to match first H1: # Title or # Title with emoji
+        lines = content.split('\n')
+        result_lines = []
+        h1_removed = False
+
+        for line in lines:
+            # Skip the first H1 line
+            if not h1_removed and line.strip().startswith('# '):
+                h1_removed = True
+                continue
+            result_lines.append(line)
+
+        return '\n'.join(result_lines)
+
     def process_markdown_file(self, md_file):
         """Process a markdown file and return article data"""
         with open(md_file, 'r', encoding='utf-8') as f:
@@ -1337,6 +1356,9 @@ self.addEventListener('fetch', function(event) {{
 
         # Fix Hebrew in LaTeX formulas
         body = self.fix_latex_hebrew(body)
+
+        # Remove first H1 (title is already in article header)
+        body = self.remove_first_h1(body)
 
         # Extract filename info
         filename = md_file.name
