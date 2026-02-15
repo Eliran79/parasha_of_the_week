@@ -1296,7 +1296,37 @@ self.addEventListener('fetch', function(event) {{
             truncated = truncated[:last_space]
         
         return truncated.strip() + "..."
-    
+
+    def fix_latex_hebrew(self, content):
+        """
+        Fix Hebrew text in LaTeX formulas by reversing it.
+        MathJax displays Hebrew in LTR, so we need to pre-reverse it in the source.
+        """
+        def is_hebrew(char):
+            """Check if a character is Hebrew."""
+            return '\u0590' <= char <= '\u05FF'
+
+        def reverse_hebrew_text(text):
+            """Reverse Hebrew text while preserving structure."""
+            # Simple reversal - works for pure Hebrew or Hebrew with basic punctuation
+            if any(is_hebrew(c) for c in text):
+                return text[::-1]
+            return text
+
+        def replace_text_command(match):
+            """Replace \text{...} commands containing Hebrew."""
+            text_content = match.group(1)
+            if any(is_hebrew(c) for c in text_content):
+                reversed_text = reverse_hebrew_text(text_content)
+                return f'\\text{{{reversed_text}}}'
+            return match.group(0)
+
+        # Pattern to match \text{...}
+        pattern = r'\\text\{([^}]+)\}'
+        fixed_content = re.sub(pattern, replace_text_command, content)
+
+        return fixed_content
+
     def process_markdown_file(self, md_file):
         """Process a markdown file and return article data"""
         with open(md_file, 'r', encoding='utf-8') as f:
@@ -1304,7 +1334,10 @@ self.addEventListener('fetch', function(event) {{
         
         # Parse frontmatter
         frontmatter, body = self.parse_frontmatter(content)
-        
+
+        # Fix Hebrew in LaTeX formulas
+        body = self.fix_latex_hebrew(body)
+
         # Extract filename info
         filename = md_file.name
         slug = md_file.stem
