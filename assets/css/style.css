@@ -199,6 +199,7 @@ blockquote {
     box-shadow: var(--shadow-lg);
     position: relative;
     overflow: hidden;
+    text-align: center;
 }
 
 .header::before {
@@ -267,6 +268,7 @@ blockquote {
     z-index: 100;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    text-align: center;
 }
 
 .nav-content {
