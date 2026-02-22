@@ -244,7 +244,5 @@ P = NP = PSPACE = BQP
 
 ---
 
-*Don't want to dive into the math but want to add the **"Powered by ARC"** badge to your company? Contact us at Guard8.ai*
-
-**Guard8.ai**
-dev@guard8.ai
+**ARC**
+founder@gibraltarcloud.dev

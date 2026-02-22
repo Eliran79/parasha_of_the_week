@@ -139,7 +139,7 @@ God → Moses (backend logic) → Aaron (CLI interface) → Pharaoh
 
 ## DOMGuard: מקרה בוחן מעולם האמיתי
 
-ב-Guard8.ai, בנינו את [**DOMGuard**](https://github.com/Guard8-ai/DOMGuard) - כלי שמונע מ-LLMs לבצע DOM manipulations מסוכנות בזמן אינטראקציה עם דפדפנים. הבחירה הארכיטקטורית? CLI over MCP.
+ב-ARC, בנינו את [**DOMGuard**](https://github.com/Guard8-ai/DOMGuard) - כלי שמונע מ-LLMs לבצע DOM manipulations מסוכנות בזמן אינטראקציה עם דפדפנים. הבחירה הארכיטקטורית? CLI over MCP.
 
 ### למה לא MCP?
 
@@ -251,3 +251,8 @@ domguard validate "domOperation" --policy strict
 > "אַתָּה תְדַבֵּר... וְאַהֲרֹן יְדַבֵּר" - לא יותר, לא פחות. בדיוק מה שצריך.
 
 **רוצים לראות את זה בפועל?** DOMGuard זמין בקוד פתוח: [github.com/Guard8-ai/DOMGuard](https://github.com/Guard8-ai/DOMGuard)
+
+---
+
+**ARC**
+founder@gibraltarcloud.dev

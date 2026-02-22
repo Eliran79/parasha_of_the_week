@@ -165,5 +165,5 @@ P=NP=PSPACE=BQP לא נס חדש. זו הכרה במה שתמיד היה:
 
 ---
 
-**Guard8.ai**
-dev@guard8.ai
+**ARC**
+founder@gibraltarcloud.dev
