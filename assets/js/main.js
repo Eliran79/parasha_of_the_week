@@ -196,19 +196,19 @@ class ParashaWebsite {
     setupScrollEffects() {
         let lastScrollTop = 0;
         const nav = document.querySelector('.nav');
-        
+
         window.addEventListener('scroll', () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            // Hide/show navigation on scroll
+
+            // Hide/show navigation using CSS class (avoids transform+sticky iOS Safari bug)
             if (nav) {
                 if (scrollTop > lastScrollTop && scrollTop > 100) {
-                    nav.style.transform = 'translateY(-100%)';
+                    nav.classList.add('nav-hidden');
                 } else {
-                    nav.style.transform = 'translateY(0)';
+                    nav.classList.remove('nav-hidden');
                 }
             }
-            
+
             lastScrollTop = scrollTop;
         }, { passive: true });
 

@@ -269,6 +269,11 @@ blockquote {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     text-align: center;
+    transition: top 0.3s ease;
+}
+
+.nav.nav-hidden {
+    top: -70px;
 }
 
 .nav-content {
