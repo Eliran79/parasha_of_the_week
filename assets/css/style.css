@@ -819,10 +819,11 @@ blockquote {
 
     .article-page {
         padding: 0;
-        margin: 0 auto;
+        margin: 0;
         width: 100%;
+        max-width: 100%;
     }
-    
+
     .article-header {
         width: 100%;
         max-width: 100%;
@@ -921,15 +922,17 @@ blockquote {
     
     .article-page {
         padding: 0;
+        margin: 0;
         width: 100%;
+        max-width: 100%;
     }
-    
+
     .article-header {
         width: 100%;
         max-width: 100%;
         text-align: center;
     }
-    
+
     .article-hero {
         width: 100%;
         margin: 0 0 var(--space-lg) 0;
