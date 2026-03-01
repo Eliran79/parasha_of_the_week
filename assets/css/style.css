@@ -543,6 +543,34 @@ blockquote {
     line-height: 1.8;
     color: var(--text-primary);
     clear: both;
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* MathJax overflow fix for mobile */
+mjx-container {
+    overflow-x: auto;
+    max-width: 100%;
+    display: block;
+}
+mjx-container[display="true"] {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+/* Table overflow fix */
+.article-content table {
+    overflow-x: auto;
+    display: block;
+    max-width: 100%;
+}
+
+/* Images in content */
+.article-content img {
+    max-width: 100%;
+    height: auto;
 }
 
 .article-content h2 {
@@ -794,9 +822,10 @@ blockquote {
         padding: var(--space-lg) var(--space-md);
         max-width: 100%;
         width: 100%;
+        margin: 0;
         box-sizing: border-box;
     }
-    
+
     .articles-grid {
         grid-template-columns: 1fr;
         gap: var(--space-lg);
