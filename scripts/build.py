@@ -19,8 +19,11 @@ class ParashaWebsiteBuilder:
         self.images_dir = Path(images_dir)
         self.articles = []
 
-        # Base path for GitHub Pages - change to empty string for root domain
-        self.base_path = "/parasha_of_the_week"
+        # Base path for GitHub Pages - empty for custom domain
+        self.base_path = ""
+
+        # Canonical site URL for custom domain
+        self.site_url = "https://blog.gibraltarcloud.dev"
 
         # Cache busting version - timestamp at build time
         self.cache_version = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -474,12 +477,12 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{description}}', 'חיבור בין פרשיות התורה למתמטיקה, מדע הנתונים, בינה מלאכותית ועולם הסטארטאפים')
         page_html = page_html.replace('{{keywords}}', 'פרשת השבוע, מתמטיקה, מדע נתונים, בינה מלאכותית, יהדות, טכנולוגיה')
         page_html = page_html.replace('{{author}}', 'אלירן סבג')
-        page_html = page_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/logo.png')
+        page_html = page_html.replace('{{image_url}}', f'{self.site_url}{self.base_path}/images/logo.png')
         page_html = page_html.replace('{{image_width}}', '1200')
         page_html = page_html.replace('{{image_height}}', '630')
         page_html = page_html.replace('{{image_type}}', 'image/png')
         page_html = page_html.replace('{{og_type}}', 'website')
-        page_html = page_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/')
+        page_html = page_html.replace('{{canonical_url}}', 'https://blog.gibraltarcloud.dev/')
         page_html = page_html.replace('{{article_meta}}', '')
         # Add website structured data schema
         page_html = page_html.replace('{{extra_head}}', self.generate_website_schema())
@@ -544,12 +547,10 @@ class ParashaWebsiteBuilder:
         page_html = page_html.replace('{{keywords}}', ', '.join(article['tags']))
         page_html = page_html.replace('{{author}}', article.get('author', 'אלירן סבג'))
         # Convert relative image path to absolute URL for Open Graph
-        if article['image'].startswith('/parasha_of_the_week/'):
-            absolute_image_url = f"https://Eliran79.github.io{article['image']}"
-        elif article['image'].startswith('/'):
-            absolute_image_url = f"https://Eliran79.github.io/parasha_of_the_week{article['image']}"
+        if article['image'].startswith('/'):
+            absolute_image_url = f"{self.site_url}{article['image']}"
         else:
-            absolute_image_url = f"https://Eliran79.github.io/parasha_of_the_week/{article['image']}"
+            absolute_image_url = f"{self.site_url}/{article['image']}"
         page_html = page_html.replace('{{image_url}}', absolute_image_url)
         
         # Get actual image dimensions
@@ -561,7 +562,7 @@ class ParashaWebsiteBuilder:
         image_type = "image/webp" if article['image'].endswith('.webp') else "image/jpeg"
         page_html = page_html.replace('{{image_type}}', image_type)
         page_html = page_html.replace('{{og_type}}', 'article')
-        page_html = page_html.replace('{{canonical_url}}', f"https://Eliran79.github.io/parasha_of_the_week/articles/{article['slug']}.html")
+        page_html = page_html.replace('{{canonical_url}}', f"https://blog.gibraltarcloud.dev/articles/{article['slug']}.html")
         article_meta_tags = f'''<meta property="article:published_time" content="{article['date']}T00:00:00Z">
     <meta property="article:author" content="{article.get('author', 'אלירן סבג')}">
     <meta property="article:section" content="{article['parasha']}">'''
@@ -713,12 +714,12 @@ class ParashaWebsiteBuilder:
         about_html = about_html.replace('{{description}}', 'אודות פרויקט פרשת השבוע - חיבור בין חכמת התורה למתמטיקה ומדע הנתונים')
         about_html = about_html.replace('{{keywords}}', 'אודות, פרשת השבוע, מתמטיקה, מדע נתונים')
         about_html = about_html.replace('{{author}}', 'אלירן סבג')
-        about_html = about_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/about.png')
+        about_html = about_html.replace('{{image_url}}', f'{self.site_url}{self.base_path}/images/about.png')
         about_html = about_html.replace('{{image_width}}', '1200')
         about_html = about_html.replace('{{image_height}}', '630')
         about_html = about_html.replace('{{image_type}}', 'image/png')
         about_html = about_html.replace('{{og_type}}', 'website')
-        about_html = about_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/about.html')
+        about_html = about_html.replace('{{canonical_url}}', 'https://blog.gibraltarcloud.dev/about.html')
         about_html = about_html.replace('{{article_meta}}', '')
         about_html = about_html.replace('{{extra_head}}', '')
         about_html = about_html.replace('{{extra_scripts}}', '')
@@ -806,12 +807,12 @@ class ParashaWebsiteBuilder:
         contact_html = contact_html.replace('{{description}}', 'יצירת קשר עם אלירן סבג, יוצר פרויקט פרשת השבוע')
         contact_html = contact_html.replace('{{keywords}}', 'צור קשר, אלירן סבג, פרשת השבוע')
         contact_html = contact_html.replace('{{author}}', 'אלירן סבג')
-        contact_html = contact_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/contact.png')
+        contact_html = contact_html.replace('{{image_url}}', f'{self.site_url}{self.base_path}/images/contact.png')
         contact_html = contact_html.replace('{{image_width}}', '1200')
         contact_html = contact_html.replace('{{image_height}}', '630')
         contact_html = contact_html.replace('{{image_type}}', 'image/png')
         contact_html = contact_html.replace('{{og_type}}', 'website')
-        contact_html = contact_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/contact.html')
+        contact_html = contact_html.replace('{{canonical_url}}', 'https://blog.gibraltarcloud.dev/contact.html')
         contact_html = contact_html.replace('{{article_meta}}', '')
         contact_html = contact_html.replace('{{extra_head}}', '')
         contact_html = contact_html.replace('{{extra_scripts}}', '')
@@ -907,12 +908,12 @@ class ParashaWebsiteBuilder:
         archive_html = archive_html.replace('{{description}}', 'ארכיון כל המאמרים בפרשת השבוע')
         archive_html = archive_html.replace('{{keywords}}', 'ארכיון, פרשות, מאמרים')
         archive_html = archive_html.replace('{{author}}', 'אלירן סבג')
-        archive_html = archive_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/archive.png')
+        archive_html = archive_html.replace('{{image_url}}', f'{self.site_url}{self.base_path}/images/archive.png')
         archive_html = archive_html.replace('{{image_width}}', '1200')
         archive_html = archive_html.replace('{{image_height}}', '630')
         archive_html = archive_html.replace('{{image_type}}', 'image/png')
         archive_html = archive_html.replace('{{og_type}}', 'website')
-        archive_html = archive_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/archive.html')
+        archive_html = archive_html.replace('{{canonical_url}}', 'https://blog.gibraltarcloud.dev/archive.html')
         archive_html = archive_html.replace('{{article_meta}}', '')
         archive_html = archive_html.replace('{{extra_head}}', '')
         archive_html = archive_html.replace('{{extra_scripts}}', '')
@@ -1011,12 +1012,12 @@ class ParashaWebsiteBuilder:
         tags_html = tags_html.replace('{{description}}', 'מאמרים מאורגנים לפי תגיות ונושאים')
         tags_html = tags_html.replace('{{keywords}}', 'תגיות, נושאים, פרשות')
         tags_html = tags_html.replace('{{author}}', 'אלירן סבג')
-        tags_html = tags_html.replace('{{image_url}}', f'https://Eliran79.github.io{self.base_path}/images/tags.png')
+        tags_html = tags_html.replace('{{image_url}}', f'{self.site_url}{self.base_path}/images/tags.png')
         tags_html = tags_html.replace('{{image_width}}', '1200')
         tags_html = tags_html.replace('{{image_height}}', '630')
         tags_html = tags_html.replace('{{image_type}}', 'image/png')
         tags_html = tags_html.replace('{{og_type}}', 'website')
-        tags_html = tags_html.replace('{{canonical_url}}', 'https://Eliran79.github.io/parasha_of_the_week/tags.html')
+        tags_html = tags_html.replace('{{canonical_url}}', 'https://blog.gibraltarcloud.dev/tags.html')
         tags_html = tags_html.replace('{{article_meta}}', '')
         tags_html = tags_html.replace('{{extra_head}}', '')
         tags_html = tags_html.replace('{{extra_scripts}}', '')
@@ -1099,6 +1100,11 @@ self.addEventListener('fetch', function(event) {{
         
         # Create output directory
         self.output_dir.mkdir(parents=True, exist_ok=True)
+
+        # Write CNAME for custom domain
+        cname = self.site_url.replace("https://", "").replace("http://", "")
+        with open(self.output_dir / "CNAME", 'w') as f:
+            f.write(cname)
         
         # Process all markdown files
         print("📝 Processing markdown files...")
@@ -1490,8 +1496,8 @@ self.addEventListener('fetch', function(event) {{
             "version": "https://jsonfeed.org/version/1.1",
             "title": "פרשת השבוע",
             "description": "חיבור בין פרשיות התורה למתמטיקה, מדע הנתונים ובינה מלאכותית",
-            "home_page_url": "https://Eliran79.github.io/parasha_of_the_week/",
-            "feed_url": "https://Eliran79.github.io/parasha_of_the_week/feed.json",
+            "home_page_url": "https://blog.gibraltarcloud.dev/",
+            "feed_url": "https://blog.gibraltarcloud.dev/feed.json",
             "language": "he",
             "items": []
         }
@@ -1500,8 +1506,8 @@ self.addEventListener('fetch', function(event) {{
         latest_articles = sorted(self.articles, key=lambda x: x['date'], reverse=True)[:20]
         for article in latest_articles:
             feed["items"].append({
-                "id": f"https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html",
-                "url": f"https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html",
+                "id": f"https://blog.gibraltarcloud.dev{{base_path}}/articles/{article['slug']}.html",
+                "url": f"https://blog.gibraltarcloud.dev{{base_path}}/articles/{article['slug']}.html",
                 "title": article['title'],
                 "content_html": markdown.markdown(article['content'], extensions=['codehilite', 'tables', 'toc', 'fenced_code']),
                 "summary": article['excerpt'],
@@ -1524,9 +1530,9 @@ self.addEventListener('fetch', function(event) {{
 <channel>
     <title>פרשת השבוע</title>
     <description>חיבור בין פרשיות התורה למתמטיקה, מדע הנתונים ובינה מלאכותית</description>
-    <link>https://Eliran79.github.io/parasha_of_the_week/</link>
+    <link>https://blog.gibraltarcloud.dev/</link>
     <language>he</language>
-    <atom:link href="https://Eliran79.github.io/parasha_of_the_week/feed.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="https://blog.gibraltarcloud.dev/feed.xml" rel="self" type="application/rss+xml"/>
 '''
         
         for article in latest_articles:
@@ -1534,8 +1540,8 @@ self.addEventListener('fetch', function(event) {{
     <item>
         <title>{article['title']}</title>
         <description>{article['excerpt']}</description>
-        <link>https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html</link>
-        <guid>https://Eliran79.github.io/parasha_of_the_week{{base_path}}/articles/{article['slug']}.html</guid>
+        <link>https://blog.gibraltarcloud.dev{{base_path}}/articles/{article['slug']}.html</link>
+        <guid>https://blog.gibraltarcloud.dev{{base_path}}/articles/{article['slug']}.html</guid>
         <pubDate>{article['date']}</pubDate>
         <author>{article['author']}</author>
     </item>'''
@@ -1553,23 +1559,23 @@ self.addEventListener('fetch', function(event) {{
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
-        <loc>https://Eliran79.github.io/parasha_of_the_week/</loc>
+        <loc>https://blog.gibraltarcloud.dev/</loc>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <lastmod>''' + datetime.now().strftime('%Y-%m-%d') + '''</lastmod>
     </url>
     <url>
-        <loc>https://Eliran79.github.io/parasha_of_the_week/archive.html</loc>
+        <loc>https://blog.gibraltarcloud.dev/archive.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://Eliran79.github.io/parasha_of_the_week/tags.html</loc>
+        <loc>https://blog.gibraltarcloud.dev/tags.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://Eliran79.github.io/parasha_of_the_week/about.html</loc>
+        <loc>https://blog.gibraltarcloud.dev/about.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
@@ -1578,12 +1584,12 @@ self.addEventListener('fetch', function(event) {{
         for article in sorted(self.articles, key=lambda x: x['date'], reverse=True):
             sitemap_content += f'''
     <url>
-        <loc>https://Eliran79.github.io{self.base_path}/articles/{article['slug']}.html</loc>
+        <loc>{self.site_url}{self.base_path}/articles/{article['slug']}.html</loc>
         <lastmod>{article['date']}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
         <image:image>
-            <image:loc>https://Eliran79.github.io{article['image']}</image:loc>
+            <image:loc>{self.site_url}{article['image']}</image:loc>
             <image:title>{article['title']}</image:title>
         </image:image>
     </url>'''
@@ -1605,8 +1611,8 @@ Allow: /assets/
 Allow: /api/
 
 # Sitemaps
-Sitemap: https://Eliran79.github.io{self.base_path}/sitemap.xml
-Sitemap: https://Eliran79.github.io{self.base_path}/feed.xml
+Sitemap: {self.site_url}{self.base_path}/sitemap.xml
+Sitemap: {self.site_url}{self.base_path}/feed.xml
 
 # Crawl-delay (be respectful)
 Crawl-delay: 1
@@ -1644,7 +1650,7 @@ Allow: /
             "@type": "Article",
             "headline": article['title'],
             "description": article['excerpt'],
-            "image": f"https://Eliran79.github.io{article['image']}",
+            "image": f"{self.site_url}{article['image']}",
             "datePublished": f"{article['date']}T00:00:00Z",
             "dateModified": f"{article['date']}T00:00:00Z",
             "author": {
@@ -1658,12 +1664,12 @@ Allow: /
                 "name": "פרשת השבוע",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": f"https://Eliran79.github.io{self.base_path}/images/logo.png"
+                    "url": f"{self.site_url}{self.base_path}/images/logo.png"
                 }
             },
             "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": f"https://Eliran79.github.io{self.base_path}/articles/{article['slug']}.html"
+                "@id": f"{self.site_url}{self.base_path}/articles/{article['slug']}.html"
             },
             "keywords": ", ".join(article.get('tags', [])),
             "articleSection": article.get('parasha', ''),
@@ -1683,7 +1689,7 @@ Allow: /
             "@type": "WebSite",
             "name": "פרשת השבוע",
             "description": "חיבור בין פרשיות התורה למתמטיקה, מדע הנתונים ובינה מלאכותית",
-            "url": f"https://Eliran79.github.io{self.base_path}/",
+            "url": f"{self.site_url}{self.base_path}/",
             "inLanguage": "he",
             "author": {
                 "@type": "Person",
@@ -1693,7 +1699,7 @@ Allow: /
             },
             "potentialAction": {
                 "@type": "SearchAction",
-                "target": f"https://Eliran79.github.io{self.base_path}/?q={{search_term_string}}",
+                "target": f"{self.site_url}{self.base_path}/?q={{search_term_string}}",
                 "query-input": "required name=search_term_string"
             }
         }
@@ -1714,8 +1720,8 @@ Allow: /
                 "tags": article['tags'],
                 "excerpt": article['excerpt'],
                 "content": article['content'],
-                "url": f"https://Eliran79.github.io{self.base_path}/articles/{article['slug']}.html",
-                "image": f"https://Eliran79.github.io{article['image']}",
+                "url": f"{self.site_url}{self.base_path}/articles/{article['slug']}.html",
+                "image": f"{self.site_url}{article['image']}",
                 "reading_time": article.get('reading_time', 'N/A'),
                 "slug": article['slug']
             }
@@ -1732,7 +1738,7 @@ Allow: /
                 "description": "Hebrew tech blog connecting Torah portions with mathematics, data science, and AI",
                 "description_hebrew": "חיבור בין פרשיות התורה למתמטיקה, מדע הנתונים ובינה מלאכותית",
                 "language": "he",
-                "url": f"https://Eliran79.github.io{self.base_path}/",
+                "url": f"{self.site_url}{self.base_path}/",
                 "author": {
                     "name": "אלירן סבג",
                     "name_english": "Eliran Sabag",
@@ -1756,8 +1762,8 @@ Allow: /
             "articles": [
                 {
                     "title": article['title'],
-                    "url": f"https://Eliran79.github.io{self.base_path}/articles/{article['slug']}.html",
-                    "api_url": f"https://Eliran79.github.io{self.base_path}/api/articles/{article['slug']}.json",
+                    "url": f"{self.site_url}{self.base_path}/articles/{article['slug']}.html",
+                    "api_url": f"{self.site_url}{self.base_path}/api/articles/{article['slug']}.json",
                     "parasha": article['parasha'],
                     "date": article['date'],
                     "tags": article['tags'],
@@ -1767,8 +1773,8 @@ Allow: /
                 for article in sorted(self.articles, key=lambda x: x['date'], reverse=True)
             ],
             "feeds": {
-                "rss": f"https://Eliran79.github.io{self.base_path}/feed.xml",
-                "json": f"https://Eliran79.github.io{self.base_path}/feed.json"
+                "rss": f"{self.site_url}{self.base_path}/feed.xml",
+                "json": f"{self.site_url}{self.base_path}/feed.json"
             },
             "tags": list(set(tag for a in self.articles for tag in a['tags'])),
             "parashot": list(set(a['parasha'] for a in self.articles))
