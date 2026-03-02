@@ -285,7 +285,28 @@ blockquote {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: var(--space-lg);
     height: 60px;
+}
+
+.shield-badge {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    opacity: 0.45;
+    text-decoration: none;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+    filter: grayscale(1);
+    flex-shrink: 0;
+}
+
+.shield-badge:hover {
+    opacity: 0.75;
+}
+
+.shield-badge.shield-verified {
+    opacity: 0.9;
+    filter: none;
 }
 
 .nav-links {

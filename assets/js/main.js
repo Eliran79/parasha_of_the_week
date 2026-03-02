@@ -1,6 +1,92 @@
 // assets/js/main.js
 // Interactive features for Parasha website
 
+/**
+ * Dikestra Shield - Browser decryptor (Web Crypto API implementation)
+ * Compatible with shield-crypto Python package v2.1
+ * Protocol: PBKDF2-SHA256 key derivation + SHA256-CTR stream cipher + HMAC-SHA256 auth
+ */
+class ShieldDecryptor {
+    constructor(password, service) {
+        this._password = password;
+        this._service = service;
+        this._ready = this._init();
+    }
+
+    async _init() {
+        const enc = new TextEncoder();
+        // Salt = SHA256(service)
+        const salt = await crypto.subtle.digest('SHA-256', enc.encode(this._service));
+        // PBKDF2-SHA256: 100k iterations, 256-bit output
+        const keyMaterial = await crypto.subtle.importKey(
+            'raw', enc.encode(this._password), { name: 'PBKDF2' }, false, ['deriveBits']
+        );
+        const masterBits = await crypto.subtle.deriveBits(
+            { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
+            keyMaterial, 256
+        );
+        const masterKey = new Uint8Array(masterBits);
+        // Derive enc/mac subkeys via HMAC domain separation
+        const hmacKey = await crypto.subtle.importKey(
+            'raw', masterKey, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+        );
+        this._encKey = new Uint8Array(await crypto.subtle.sign('HMAC', hmacKey, enc.encode('shield-encrypt')));
+        this._macKey = new Uint8Array(await crypto.subtle.sign('HMAC', hmacKey, enc.encode('shield-authenticate')));
+    }
+
+    async _keystream(nonce, length) {
+        // SHA256(enc_key || nonce || counter_LE32) per 32-byte block
+        const out = new Uint8Array(Math.ceil(length / 32) * 32);
+        for (let i = 0; i < Math.ceil(length / 32); i++) {
+            const ctr = new Uint8Array(4);
+            new DataView(ctr.buffer).setUint32(0, i, true);
+            const block = new Uint8Array(this._encKey.length + nonce.length + 4);
+            block.set(this._encKey); block.set(nonce, this._encKey.length); block.set(ctr, this._encKey.length + nonce.length);
+            out.set(new Uint8Array(await crypto.subtle.digest('SHA-256', block)), i * 32);
+        }
+        return out.slice(0, length);
+    }
+
+    async decrypt(data) {
+        await this._ready;
+        const NONCE = 16, MAC = 16, V2_HDR = 17, MIN_PAD = 32;
+        if (data.length < NONCE + MAC + 8) return null;
+
+        const nonce = data.slice(0, NONCE);
+        const ciphertext = data.slice(NONCE, -MAC);
+        const mac = data.slice(-MAC);
+
+        // Verify HMAC-SHA256(mac_key, nonce || ciphertext)[:16]
+        const macKey = await crypto.subtle.importKey('raw', this._macKey, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+        const macData = new Uint8Array(nonce.length + ciphertext.length);
+        macData.set(nonce); macData.set(ciphertext, nonce.length);
+        const expected = new Uint8Array(await crypto.subtle.sign('HMAC', macKey, macData)).slice(0, MAC);
+
+        // Constant-time compare
+        let diff = 0;
+        for (let i = 0; i < MAC; i++) diff |= mac[i] ^ expected[i];
+        if (diff !== 0) return null;
+
+        // Decrypt
+        const ks = await this._keystream(nonce, ciphertext.length);
+        const plain = new Uint8Array(ciphertext.length);
+        for (let i = 0; i < ciphertext.length; i++) plain[i] = ciphertext[i] ^ ks[i];
+
+        // Detect V2 by timestamp range (2020–2100)
+        if (plain.length >= V2_HDR) {
+            const dv = new DataView(plain.buffer, plain.byteOffset + 8, 8);
+            const ts = dv.getUint32(4, true) * 0x100000000 + dv.getUint32(0, true);
+            if (ts >= 1577836800000 && ts <= 4102444800000) {
+                const padLen = plain[16];
+                if (padLen < MIN_PAD || padLen > 128) return null;
+                const start = V2_HDR + padLen;
+                return plain.length >= start ? plain.slice(start) : null;
+            }
+        }
+        return plain.slice(8); // V1: skip counter
+    }
+}
+
 class ParashaWebsite {
     constructor() {
         this.articles = [];
@@ -17,14 +103,38 @@ class ParashaWebsite {
         this.setupAnalytics();
     }
 
-    // Load articles data
+    // Load articles data — tries Shield-encrypted index first, falls back to plain JSON
     async loadArticles() {
+        const shield = new ShieldDecryptor('guard8-shield-protected', 'blog.gibraltarcloud.dev');
+        try {
+            const res = await fetch('/articles.shield');
+            if (res.ok) {
+                const buf = await res.arrayBuffer();
+                const plain = await shield.decrypt(new Uint8Array(buf));
+                if (plain) {
+                    this.articles = JSON.parse(new TextDecoder().decode(plain));
+                    this._setShieldBadge(true);
+                    return;
+                }
+            }
+        } catch (e) { /* fall through */ }
+        // Fallback: plain articles.json
         try {
             const response = await fetch('/articles.json');
             this.articles = await response.json();
         } catch (error) {
             console.warn('Could not load articles data:', error);
             this.articles = [];
+        }
+        this._setShieldBadge(false);
+    }
+
+    _setShieldBadge(verified) {
+        const badge = document.getElementById('shield-badge');
+        if (!badge) return;
+        if (verified) {
+            badge.classList.add('shield-verified');
+            badge.title = 'Dikestra Shield — תוכן מאומת ✓';
         }
     }
 

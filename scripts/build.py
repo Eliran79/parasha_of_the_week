@@ -2,6 +2,7 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import json
 import re
 import yaml
@@ -11,6 +12,10 @@ import markdown
 from markdown.extensions import codehilite, tables, toc
 import shutil
 from PIL import Image
+
+# Bundle Shield core (no external deps - pure Python stdlib)
+sys.path.insert(0, os.path.dirname(__file__))
+from shield_core import Shield as _Shield
 
 class ParashaWebsiteBuilder:
     def __init__(self, content_dir="content", output_dir="docs", images_dir="images"):
@@ -175,6 +180,7 @@ class ParashaWebsiteBuilder:
                 <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
                 <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
             </ul>
+            <a id="shield-badge" class="shield-badge" href="https://dikestra.ai" target="_blank" rel="noopener noreferrer" title="Dikestra Shield">🛡</a>
         </div>
     </nav>
 
@@ -223,6 +229,7 @@ class ParashaWebsiteBuilder:
                 <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
                 <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
             </ul>
+            <a id="shield-badge" class="shield-badge" href="https://dikestra.ai" target="_blank" rel="noopener noreferrer" title="Dikestra Shield">🛡</a>
         </div>
     </nav>
 
@@ -305,6 +312,7 @@ class ParashaWebsiteBuilder:
                 <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
                 <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
             </ul>
+            <a id="shield-badge" class="shield-badge" href="https://dikestra.ai" target="_blank" rel="noopener noreferrer" title="Dikestra Shield">🛡</a>
         </div>
     </nav>
 
@@ -661,6 +669,7 @@ class ParashaWebsiteBuilder:
                 <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
                 <li><a href="{{base_path}}/about.html" class="nav-link active">אודות</a></li>
             </ul>
+            <a id="shield-badge" class="shield-badge" href="https://dikestra.ai" target="_blank" rel="noopener noreferrer" title="Dikestra Shield">🛡</a>
         </div>
     </nav>
 
@@ -747,6 +756,7 @@ class ParashaWebsiteBuilder:
                 <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
                 <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
             </ul>
+            <a id="shield-badge" class="shield-badge" href="https://dikestra.ai" target="_blank" rel="noopener noreferrer" title="Dikestra Shield">🛡</a>
         </div>
     </nav>
 
@@ -886,6 +896,7 @@ class ParashaWebsiteBuilder:
                 <li><a href="{{base_path}}/tags.html" class="nav-link">תגיות</a></li>
                 <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
             </ul>
+            <a id="shield-badge" class="shield-badge" href="https://dikestra.ai" target="_blank" rel="noopener noreferrer" title="Dikestra Shield">🛡</a>
         </div>
     </nav>
 
@@ -954,6 +965,7 @@ class ParashaWebsiteBuilder:
                 <li><a href="{{base_path}}/tags.html" class="nav-link active">תגיות</a></li>
                 <li><a href="{{base_path}}/about.html" class="nav-link">אודות</a></li>
             </ul>
+            <a id="shield-badge" class="shield-badge" href="https://dikestra.ai" target="_blank" rel="noopener noreferrer" title="Dikestra Shield">🛡</a>
         </div>
     </nav>
 
@@ -1165,9 +1177,19 @@ self.addEventListener('fetch', function(event) {{
         self.generate_ai_index()
 
         # Generate articles metadata
+        articles_meta = [{k: v for k, v in article.items() if k != 'content'}
+                         for article in self.articles]
+        articles_json_bytes = json.dumps(articles_meta, ensure_ascii=False, indent=2).encode('utf-8')
         with open(self.output_dir / "articles.json", 'w', encoding='utf-8') as f:
-            json.dump([{k: v for k, v in article.items() if k != 'content'}
-                      for article in self.articles], f, ensure_ascii=False, indent=2)
+            f.write(articles_json_bytes.decode('utf-8'))
+
+        # Encrypt articles.json with Shield for browser content integrity
+        print("🛡️  Encrypting articles index with Dikestra Shield...")
+        shield = _Shield("guard8-shield-protected", self.site_url.replace("https://", ""), max_age_ms=None)
+        encrypted = shield.encrypt(articles_json_bytes)
+        with open(self.output_dir / "articles.shield", 'wb') as f:
+            f.write(encrypted)
+        print(f"   ✓ articles.shield ({len(encrypted)} bytes)")
 
         print(f"✅ Website built successfully!")
         print(f"📊 Statistics:")
@@ -1473,8 +1495,12 @@ self.addEventListener('fetch', function(event) {{
             
             # Replace hardcoded paths with base_path
             js_content = js_content.replace("'/articles.json'", f"'{self.base_path}/articles.json'")
+            js_content = js_content.replace("'/articles.shield'", f"'{self.base_path}/articles.shield'")
             js_content = js_content.replace('"/articles/', f'"{self.base_path}/articles/')
             js_content = js_content.replace("'/sw.js'", f"'{self.base_path}/sw.js'")
+            # Embed Shield service name matching the encrypted file
+            domain = self.site_url.split("://", 1)[-1]
+            js_content = js_content.replace("'blog.gibraltarcloud.dev'", f"'{domain}'")
             
             with open(self.output_dir / "assets" / "js" / "main.js", 'w', encoding='utf-8') as f:
                 f.write(js_content)
