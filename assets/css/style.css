@@ -287,6 +287,8 @@ blockquote {
     align-items: center;
     gap: var(--space-lg);
     height: 60px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .shield-badge {
@@ -577,11 +579,13 @@ blockquote {
 mjx-container {
     overflow-x: auto;
     max-width: 100%;
-    display: block;
+    display: block !important;
+    -webkit-overflow-scrolling: touch;
 }
 mjx-container[display="true"] {
     overflow-x: auto;
     max-width: 100%;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Table overflow fix */
@@ -848,6 +852,7 @@ mjx-container[display="true"] {
         width: 100%;
         margin: 0;
         box-sizing: border-box;
+        overflow-x: hidden;
     }
 
     .articles-grid {
@@ -946,6 +951,7 @@ mjx-container[display="true"] {
         max-width: 100%;
         width: 100%;
         box-sizing: border-box;
+        overflow-x: hidden;
     }
 
     .articles-grid {
@@ -966,10 +972,28 @@ mjx-container[display="true"] {
         padding: 0;
     }
     
-    .nav-links {
+    .nav-content {
+        padding: 0 var(--space-sm);
         gap: var(--space-sm);
+        overflow-x: auto;
+        justify-content: flex-start;
     }
-    
+
+    .nav-links {
+        gap: 2px;
+        flex-shrink: 1;
+    }
+
+    .nav-link {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .shield-badge {
+        flex-shrink: 0;
+    }
+
     .search-input {
         padding: var(--space-md);
     }
