@@ -96,6 +96,15 @@ body {
     text-align: left;
 }
 
+/* Block-level English sections must be constrained */
+div.english {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
@@ -354,7 +363,7 @@ blockquote {
 
 /* Single Article Layout Override */
 .main.single-article {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);  /* minmax(0,1fr) forces column to shrink below min-content */
     max-width: 900px;
     gap: 0;
 }
@@ -502,6 +511,8 @@ blockquote {
     margin: 0 auto;
     width: 100%;
     box-sizing: border-box;
+    min-width: 0;          /* Critical: allow grid/flex item to shrink below min-content */
+    overflow-x: hidden;    /* Contain any overflow from wide children (math, tables) */
 }
 
 .article-header {
@@ -569,6 +580,7 @@ blockquote {
     overflow-x: hidden;
     max-width: 100%;
     width: 100%;
+    min-width: 0;
     box-sizing: border-box;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -852,7 +864,6 @@ mjx-container[display="true"] {
         width: 100%;
         margin: 0;
         box-sizing: border-box;
-        overflow-x: hidden;
     }
 
     .articles-grid {
@@ -951,7 +962,6 @@ mjx-container[display="true"] {
         max-width: 100%;
         width: 100%;
         box-sizing: border-box;
-        overflow-x: hidden;
     }
 
     .articles-grid {
