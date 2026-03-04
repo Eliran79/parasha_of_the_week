@@ -230,19 +230,18 @@ deploy_to_repo() {
     local repo_dir
     repo_dir="$(cd "$(dirname "$0")" && pwd)"
 
-    # images/ → gets copied to docs/images/ by build.py
-    cp "$OUTPUT_DIR/04-web/icon-192.png"        "$repo_dir/images/icon-192.png"
-    cp "$OUTPUT_DIR/04-web/icon-512.png"        "$repo_dir/images/icon-512.png"
-    cp "$OUTPUT_DIR/04-web/logo.png"            "$repo_dir/images/logo.png"
+    # images/ → PWA icons + OG logo (copied to docs/images/ by build.py)
+    cp "$OUTPUT_DIR/04-web/icon-192.png"         "$repo_dir/images/icon-192.png"
+    cp "$OUTPUT_DIR/04-web/icon-512.png"         "$repo_dir/images/icon-512.png"
+    cp "$OUTPUT_DIR/04-web/logo.png"             "$repo_dir/images/logo.png"
+    # favicon.ico + apple-touch-icon → promoted to docs/ root by build.py
     cp "$OUTPUT_DIR/04-web/apple-touch-icon.png" "$repo_dir/images/apple-touch-icon.png"
-    cp "$OUTPUT_DIR/05-favicon/favicon-16.png"  "$repo_dir/images/favicon-16.png"
-    cp "$OUTPUT_DIR/05-favicon/favicon-32.png"  "$repo_dir/images/favicon-32.png"
-    cp "$OUTPUT_DIR/05-favicon/favicon-48.png"  "$repo_dir/images/favicon-48.png"
-    cp "$OUTPUT_DIR/05-favicon/favicon.ico"     "$repo_dir/images/favicon.ico"
+    cp "$OUTPUT_DIR/05-favicon/favicon.ico"      "$repo_dir/images/favicon.ico"
+    # Note: favicon-16/32/48.png are build intermediates — NOT committed to the repo
 
     log_success "Files deployed to images/ — build.py will pick them up on next build"
     log_info "Review candidates in $GENERATED_DIR/ before committing."
-    log_info "To commit: cd $repo_dir && git add images/ && git commit -m 'Add AI-generated branding from Vertex AI Imagen'"
+    log_info "To commit: cd $repo_dir && git add images/ && git commit -m 'Update branding from Vertex AI Imagen'"
 }
 
 # ── Summary ────────────────────────────────────────────────────────────────────

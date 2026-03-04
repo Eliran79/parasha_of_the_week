@@ -1521,17 +1521,21 @@ self.addEventListener('fetch', function(event) {{
             if src.exists():
                 shutil.copy2(src, self.output_dir / "assets" / wasm_file)
 
-        # Copy images
+        # Files in images/ that belong at docs/ root, not docs/images/
+        ROOT_ASSETS = {"favicon.ico", "apple-touch-icon.png"}
+        # Files in images/ that are PWA/brand assets — copied normally but not article images
+        BRAND_ASSETS = {"icon-192.png", "icon-512.png", "logo.png"}
+
         if self.images_dir.exists():
             for img_file in self.images_dir.iterdir():
-                if img_file.is_file():
+                if not img_file.is_file():
+                    continue
+                if img_file.name in ROOT_ASSETS:
+                    # Promote to docs/ root
+                    shutil.copy2(img_file, self.output_dir / img_file.name)
+                else:
+                    # Copy to docs/images/ (article images + brand assets)
                     shutil.copy2(img_file, self.output_dir / "images" / img_file.name)
-
-        # Promote favicon.ico and apple-touch-icon.png to docs/ root
-        for root_asset in ["favicon.ico", "apple-touch-icon.png"]:
-            src = self.images_dir / root_asset
-            if src.exists():
-                shutil.copy2(src, self.output_dir / root_asset)
 
         # Copy Google Search Console verification file if exists
         google_verification = Path("google7619e0f6b0b2836c.html")

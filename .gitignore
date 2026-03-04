@@ -80,3 +80,9 @@ htmlcov/
 *.seed
 *.pid.lock
 .domguard/
+
+# TaskGuard
+.taskguard/state/
+
+# Branding generator output (candidates + processed assets)
+branding-assets/
