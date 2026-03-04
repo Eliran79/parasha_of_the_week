@@ -582,8 +582,117 @@ window.toggleDarkMode = () => parashaWebsite?.toggleDarkMode();
 // Performance monitoring
 window.addEventListener('load', () => {
     if (window.performance && window.performance.timing) {
-        const loadTime = window.performance.timing.loadEventEnd - 
+        const loadTime = window.performance.timing.loadEventEnd -
                         window.performance.timing.navigationStart;
         console.log(`Page loaded in ${loadTime}ms`);
     }
 });
+
+// ── Hard Reload (no-cache) ──────────────────────────────────────────────────
+// Clears all SW caches then reloads so fresh content is fetched from network.
+
+async function hardReload() {
+    if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+    }
+    window.location.reload();
+}
+
+// F5 → hard reload (intercepts before browser default)
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'F5') {
+        e.preventDefault();
+        hardReload();
+    }
+});
+
+// Pull-to-refresh ─────────────────────────────────────────────────────────────
+// Custom pull-to-refresh that clears the SW cache before reloading.
+// Disables Chrome's native pull-to-refresh via overscroll-behavior so only
+// our version (which bypasses cache) fires.
+
+document.documentElement.style.overscrollBehaviorY = 'contain';
+
+(function initPullToRefresh() {
+    const THRESHOLD = 70; // px to pull before "release to refresh"
+    let startY = 0;
+    let currentY = 0;
+    let active = false;
+
+    // Build indicator element
+    const indicator = document.createElement('div');
+    indicator.setAttribute('aria-live', 'polite');
+    indicator.style.cssText = [
+        'position:fixed', 'top:0', 'left:0', 'right:0',
+        'height:56px', 'display:flex', 'align-items:center',
+        'justify-content:center', 'gap:8px',
+        'background:var(--primary-color,#2563eb)',
+        'color:#fff', 'font-size:0.9rem',
+        'font-family:var(--font-primary,sans-serif)',
+        'transform:translateY(-100%)',
+        'transition:transform 0.15s ease',
+        'z-index:10000', 'will-change:transform',
+        'pointer-events:none'
+    ].join(';');
+    indicator.innerHTML = '<span class="ptr-icon">↓</span><span class="ptr-text">משוך לרענון ללא מטמון</span>';
+    document.body.appendChild(indicator);
+
+    const icon = indicator.querySelector('.ptr-icon');
+    const text = indicator.querySelector('.ptr-text');
+
+    function setProgress(dist) {
+        const pct = Math.min(dist / THRESHOLD, 1);
+        // Slide indicator in as user pulls
+        indicator.style.transform = `translateY(${(pct - 1) * 100}%)`;
+        if (dist >= THRESHOLD) {
+            icon.textContent = '↑';
+            text.textContent = 'שחרר לרענון';
+            indicator.style.background = 'var(--accent-color,#059669)';
+        } else {
+            icon.textContent = '↓';
+            text.textContent = 'משוך לרענון ללא מטמון';
+            indicator.style.background = 'var(--primary-color,#2563eb)';
+        }
+    }
+
+    function reset() {
+        active = false;
+        indicator.style.transition = 'transform 0.2s ease';
+        indicator.style.transform = 'translateY(-100%)';
+    }
+
+    document.addEventListener('touchstart', (e) => {
+        if (window.scrollY === 0 && e.touches.length === 1) {
+            startY = e.touches[0].clientY;
+            active = true;
+            indicator.style.transition = 'none';
+        }
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (e) => {
+        if (!active) return;
+        currentY = e.touches[0].clientY;
+        const dist = currentY - startY;
+        if (dist > 0 && window.scrollY === 0) {
+            setProgress(dist);
+        } else {
+            reset();
+        }
+    }, { passive: true });
+
+    document.addEventListener('touchend', async () => {
+        if (!active) return;
+        const dist = currentY - startY;
+        if (dist >= THRESHOLD && window.scrollY === 0) {
+            icon.textContent = '↻';
+            text.textContent = 'מרענן...';
+            indicator.style.transition = 'transform 0.15s ease';
+            indicator.style.transform = 'translateY(0)';
+            await hardReload();
+        } else {
+            reset();
+        }
+        active = false;
+    }, { passive: true });
+})();
