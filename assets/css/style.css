@@ -568,6 +568,9 @@ blockquote {
     max-width: 100%;
     width: 100%;
     box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 /* MathJax overflow fix for mobile */
@@ -868,10 +871,11 @@ mjx-container[display="true"] {
     }
 
     .article-page {
-        padding: 0;
+        padding: 0 var(--space-md);
         margin: 0;
         width: 100%;
         max-width: 100%;
+        box-sizing: border-box;
     }
 
     .article-header {
@@ -959,7 +963,7 @@ mjx-container[display="true"] {
 
     .article-content {
         font-size: 1rem;
-        padding: var(--space-md);
+        padding: 0;
     }
     
     .nav-links {
@@ -971,10 +975,11 @@ mjx-container[display="true"] {
     }
     
     .article-page {
-        padding: 0;
+        padding: 0 var(--space-md);
         margin: 0;
         width: 100%;
         max-width: 100%;
+        box-sizing: border-box;
     }
 
     .article-header {
