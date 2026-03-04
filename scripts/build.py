@@ -1527,6 +1527,12 @@ self.addEventListener('fetch', function(event) {{
                 if img_file.is_file():
                     shutil.copy2(img_file, self.output_dir / "images" / img_file.name)
 
+        # Promote favicon.ico and apple-touch-icon.png to docs/ root
+        for root_asset in ["favicon.ico", "apple-touch-icon.png"]:
+            src = self.images_dir / root_asset
+            if src.exists():
+                shutil.copy2(src, self.output_dir / root_asset)
+
         # Copy Google Search Console verification file if exists
         google_verification = Path("google7619e0f6b0b2836c.html")
         if google_verification.exists():
