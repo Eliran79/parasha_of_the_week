@@ -61,6 +61,12 @@ class ParashaWebsiteBuilder:
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
+    <!-- Security Headers (meta equivalents — real headers set by GitHub Pages HTTPS) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' cdn.jsdelivr.net cdnjs.cloudflare.com polyfill.io; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self';">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+
     <!-- Open Graph MUST be first for WhatsApp -->
     <meta property="og:title" content="{{page_title}}">
     <meta property="og:description" content="{{description}}">
@@ -1482,30 +1488,38 @@ self.addEventListener('fetch', function(event) {{
         (self.output_dir / "assets" / "css").mkdir(parents=True, exist_ok=True)
         (self.output_dir / "assets" / "js").mkdir(parents=True, exist_ok=True)
         (self.output_dir / "images").mkdir(parents=True, exist_ok=True)
-        
+
         # Copy CSS
         css_source = Path("assets/css/style.css")
         if css_source.exists():
             shutil.copy2(css_source, self.output_dir / "assets" / "css" / "style.css")
-        
+
         # Copy and process JS (replace hardcoded paths with base_path)
         js_source = Path("assets/js/main.js")
         if js_source.exists():
             with open(js_source, 'r', encoding='utf-8') as f:
                 js_content = f.read()
-            
+
             # Replace hardcoded paths with base_path
             js_content = js_content.replace("'/articles.json'", f"'{self.base_path}/articles.json'")
             js_content = js_content.replace("'/articles.shield'", f"'{self.base_path}/articles.shield'")
             js_content = js_content.replace('"/articles/', f'"{self.base_path}/articles/')
             js_content = js_content.replace("'/sw.js'", f"'{self.base_path}/sw.js'")
+            js_content = js_content.replace("'/assets/shield_core.js'", f"'{self.base_path}/assets/shield_core.js'")
+            js_content = js_content.replace("'/assets/shield_core_bg.wasm'", f"'{self.base_path}/assets/shield_core_bg.wasm'")
             # Embed Shield service name matching the encrypted file
             domain = self.site_url.split("://", 1)[-1]
             js_content = js_content.replace("'blog.gibraltarcloud.dev'", f"'{domain}'")
-            
+
             with open(self.output_dir / "assets" / "js" / "main.js", 'w', encoding='utf-8') as f:
                 f.write(js_content)
-        
+
+        # Copy WasmShield files (Dikestra Shield — Ring crypto via WASM)
+        for wasm_file in ["shield_core.js", "shield_core_bg.wasm"]:
+            src = Path(f"assets/{wasm_file}")
+            if src.exists():
+                shutil.copy2(src, self.output_dir / "assets" / wasm_file)
+
         # Copy images
         if self.images_dir.exists():
             for img_file in self.images_dir.iterdir():
