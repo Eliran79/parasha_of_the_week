@@ -506,10 +506,11 @@ class ParashaWebsiteBuilder:
         # Convert markdown to HTML
         md = markdown.Markdown(extensions=[
             'codehilite',
-            'tables', 
+            'tables',
             'toc',
             'fenced_code',
-            'nl2br'
+            'nl2br',
+            'md_in_html'
         ])
         
         content_html = md.convert(article['content'])
@@ -1535,7 +1536,7 @@ self.addEventListener('fetch', function(event) {{
                 "id": f"https://blog.gibraltarcloud.dev{{base_path}}/articles/{article['slug']}.html",
                 "url": f"https://blog.gibraltarcloud.dev{{base_path}}/articles/{article['slug']}.html",
                 "title": article['title'],
-                "content_html": markdown.markdown(article['content'], extensions=['codehilite', 'tables', 'toc', 'fenced_code']),
+                "content_html": markdown.markdown(article['content'], extensions=['codehilite', 'tables', 'toc', 'fenced_code', 'md_in_html']),
                 "summary": article['excerpt'],
                 "date_published": f"{article['date']}T00:00:00Z",
                 "tags": article['tags'],
