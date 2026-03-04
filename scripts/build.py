@@ -441,6 +441,7 @@ class ParashaWebsiteBuilder:
                     <div class="author-links">
                         <a href="mailto:eliran.sbg@gmail.com" class="author-link">📧 eliran.sbg@gmail.com</a>
                         <a href="https://www.linkedin.com/in/eliran-sabag-51832651/" class="author-link" target="_blank" rel="noopener">💼 LinkedIn</a>
+                        <a href="https://arc.ceo" class="author-link" target="_blank" rel="noopener">🏛️ ARC.ceo</a>
                     </div>
                 </div>
             </div>
