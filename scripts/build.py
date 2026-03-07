@@ -508,9 +508,35 @@ class ParashaWebsiteBuilder:
         
         return page_html
 
+    def _protect_math(self, content):
+        """Extract LaTeX math blocks before markdown processing.
+        Prevents _ and * inside $...$ / $$...$$ from being treated as Markdown emphasis."""
+        protected = {}
+        counter = [0]
+
+        def replace(m):
+            key = f'LATEXMATH{counter[0]}END'
+            protected[key] = m.group(0)
+            counter[0] += 1
+            return key
+
+        # Display math first (greedy-safe: non-greedy [\s\S]*?)
+        content = re.sub(r'\$\$[\s\S]*?\$\$', replace, content)
+        # Inline math: $...$ not preceded/followed by another $
+        content = re.sub(r'(?<!\$)\$(?!\$)(?:[^\n$\\]|\\.)+?\$(?!\$)', replace, content)
+        return content, protected
+
+    def _restore_math(self, html, protected):
+        """Restore LaTeX math blocks after markdown processing."""
+        for key, value in protected.items():
+            html = html.replace(key, value)
+        return html
+
     def render_article_page(self, article):
         """Render individual article page"""
-        # Convert markdown to HTML
+        # Convert markdown to HTML — protect math blocks first so _ and * are not
+        # treated as Markdown emphasis inside LaTeX formulas.
+        content_text, math_blocks = self._protect_math(article['content'])
         md = markdown.Markdown(extensions=[
             'codehilite',
             'tables',
@@ -519,8 +545,8 @@ class ParashaWebsiteBuilder:
             'nl2br',
             'md_in_html'
         ])
-        
-        content_html = md.convert(article['content'])
+
+        content_html = self._restore_math(md.convert(content_text), math_blocks)
         
         # Generate tags HTML
         tags_html = ''.join([f'<a href="{{base_path}}/tags.html#tag-{tag}" class="tag">#{tag}</a>' 
