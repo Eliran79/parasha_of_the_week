@@ -178,6 +178,8 @@ pre {
     direction: ltr;
     text-align: left;
     max-width: 100%;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
 }
 
 pre code {
@@ -592,11 +594,13 @@ mjx-container {
     overflow-x: auto;
     max-width: 100%;
     display: block !important;
+    box-sizing: border-box;
     -webkit-overflow-scrolling: touch;
 }
 mjx-container[display="true"] {
     overflow-x: auto;
     max-width: 100%;
+    box-sizing: border-box;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -980,6 +984,13 @@ mjx-container[display="true"] {
     .article-content {
         font-size: 1rem;
         padding: 0;
+    }
+
+    .article-content pre {
+        font-size: 0.78rem;
+        padding: var(--space-md);
+        border-radius: var(--radius-sm);
+        margin: var(--space-md) 0;
     }
     
     .nav-content {
