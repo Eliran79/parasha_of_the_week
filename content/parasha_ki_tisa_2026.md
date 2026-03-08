@@ -96,7 +96,7 @@ $$\rho_{\text{פרה}} = |\psi_0\rangle\langle\psi_0| \quad \text{(pure state, n
 
 המזיגה הספציפית: **מים חיים + אפר הפרה**.
 
-$$\underbrace{\text{מים חיים}}_{\text{continuous}} + \underbrace{\text{אפר}}_{\text{discrete}} = \text{מדיום ההעברה}$$
+$$\text{מים חיים}_{\,\text{continuous}} + \text{אפר}_{\,\text{discrete}} = \text{מדיום ההעברה}$$
 
 זהו **Nitai Principle** — הרצף מתוקן על ידי הדיסקרטי.
 
