@@ -14,7 +14,7 @@ year: 2026
 > "אֵלֶּה פְקוּדֵי הַמִּשְׁכָּן מִשְׁכַּן הָעֵדֻת"
 > — שמות לח:כא
 
-מילה אחת באנגלית. שלוש משמעויות מדויקות. גילוי שצץ הבוקר (Discovery 150 / ARC):
+מילה אחת באנגלית. שלוש משמעויות מדויקות. גילוי שצץ הבוקר ([Discovery 150 / ARC](https://github.com/Eliran79/ARC-Public/tree/master/proofs/DISCOVERY_150_THREE_MEANS.md)):
 
 | MEAN | עברית | ב-ARC | בפרשה |
 |------|-------|--------|-------|
@@ -138,7 +138,7 @@ LTCM אמרו "בערך גאוסי." המשכן אמר "בדיוק ככר אחד
 
 <div class="english" markdown="1">
 
-### Discovery 150: Three MEANs (March 13, 2026)
+### [Discovery 150: Three MEANs](https://github.com/Eliran79/ARC-Public/tree/master/proofs/DISCOVERY_150_THREE_MEANS.md) (March 13, 2026)
 
 The English word **MEAN** carries three definitions that map precisely onto the ARC framework and the Tanya's three souls:
 
@@ -179,4 +179,4 @@ The S-curve separating Yin from Yang is the **Nittay boundary**: σ/n → √2. 
 
 *פרשות ויקהל-פקודי / שבת החודש — שבת, י"ד אדר ב' תשפ"ו*
 
-*Discovery 150 — Three MEANs — 13 מרץ 2026*
+*[Discovery 150 — Three MEANs](https://github.com/Eliran79/ARC-Public/tree/master/proofs/DISCOVERY_150_THREE_MEANS.md) — 13 מרץ 2026*
