@@ -124,7 +124,7 @@ year: 2026
 
 זה בדיוק מה שקורה כשמודל בינה מלאכותית עושה Overfitting:
 
-$$\underbrace{\to 0}_{\text{שגיאה על נתוני אימון}} \quad \text{אבל} \quad \underbrace{\to \infty}_{\text{שגיאה על נתונים חדשים}}$$
+$$\underset{\text{שגיאה על נתוני אימון}}{\to 0} \quad \text{אבל} \quad \underset{\text{שגיאה על נתונים חדשים}}{\to \infty}$$
 
 המודל "ישר" מדי — עובר בדיוק דרך כל נקודת אימון — ולכן נכשל בכל מה שלא ראה.
 
@@ -132,7 +132,7 @@ $$\underbrace{\to 0}_{\text{שגיאה על נתוני אימון}} \quad \text{
 
 הפתרון נקרא **Regularization** — ובעברית: **רגולריזציה**.
 
-$$\text{שגיאה כוללת} = \underbrace{\mathcal{L}_{\text{data}}}_{\text{שגיאה על הנתונים (דיוק)}} + \lambda \cdot \underbrace{\mathcal{R}}_{\text{מורכבות המודל (קנס)}}$$
+$$\text{שגיאה כוללת} = \underset{\text{שגיאה על הנתונים — דיוק}}{\mathcal{L}_{\text{data}}} + \lambda \cdot \underset{\text{מורכבות המודל — קנס}}{\mathcal{R}}$$
 
 הרגולריזציה מוסיפה **מחיר על מורכבות יתר**. היא אומרת למודל: "תוכל להתפתל — אבל לא יותר מדי. כל פיתול מיותר עולה לך."
 
