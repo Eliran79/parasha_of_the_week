@@ -1078,11 +1078,13 @@ class ParashaWebsiteBuilder:
         """Create PWA manifest and service worker"""
         
         # PWA Manifest
+        base = self.base_path or ""
         manifest = {
             "name": "פרשת השבוע",
-            "short_name": "פרשת השבוע", 
+            "short_name": "פרשת השבוע",
             "description": "חיבור בין חכמת התורה למתמטיקה ומדע הנתונים",
-            "start_url": "/",
+            "start_url": f"{base}/",
+            "scope": f"{base}/",
             "display": "standalone",
             "background_color": "#ffffff",
             "theme_color": "#2563eb",
@@ -1090,12 +1092,12 @@ class ParashaWebsiteBuilder:
             "dir": "rtl",
             "icons": [
                 {
-                    "src": "/images/icon-192.png",
-                    "sizes": "192x192", 
+                    "src": f"{base}/images/icon-192.png",
+                    "sizes": "192x192",
                     "type": "image/png"
                 },
                 {
-                    "src": "/images/icon-512.png",
+                    "src": f"{base}/images/icon-512.png",
                     "sizes": "512x512",
                     "type": "image/png"
                 }
