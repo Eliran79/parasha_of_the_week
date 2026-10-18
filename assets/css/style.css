@@ -1165,3 +1165,23 @@ textarea:focus {
         --border-color: #000000;
     }
 }
+
+/* ── Capacitor native app: safe-area insets ───────────────────────────────── */
+/* iOS notch / Dynamic Island and Android status bar clearance.               */
+/* Classes are set by assets/js/mobile.js at runtime.                         */
+
+.capacitor-ios .header,
+.capacitor-android .header {
+    padding-top: calc(var(--space-2xl) + env(safe-area-inset-top, 0px));
+}
+
+/* Sticky nav: stay below the system status bar */
+.capacitor-ios .nav,
+.capacitor-android .nav {
+    top: env(safe-area-inset-top, 0px);
+}
+
+/* Bottom tab bar clearance (home indicator on iPhone) */
+.capacitor-ios body {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
