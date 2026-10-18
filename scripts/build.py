@@ -144,8 +144,6 @@ class ParashaWebsiteBuilder:
     
     <!-- Scripts -->
     <script src="{{base_path}}/assets/js/main.js?v={{cache_version}}"></script>
-    <script src="{{base_path}}/assets/js/mobile.js?v={{cache_version}}" type="module"></script>
-    <script src="{{base_path}}/assets/js/push.js?v={{cache_version}}" type="module"></script>
     
     <!-- Re-render MathJax and Prism -->
     <script>

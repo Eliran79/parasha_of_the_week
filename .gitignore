@@ -86,9 +86,3 @@ htmlcov/
 
 # Branding generator output (candidates + processed assets)
 branding-assets/
-
-# Capacitor native projects (generated; run cap-setup.sh to recreate)
-ios/
-android/
-node_modules/
-.venv/
